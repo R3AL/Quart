@@ -2,13 +2,13 @@
 
 namespace Quart
 {
-	MultiLineEditBox::MultiLineEditBox(int id, 
-		int x, 
-		int y, 
-		int width, 
-		int height, 
-		const tstring& text, 
-		unsigned long styles /* = */ ) : Object(id, x, y, width, height, styles), text(text) {}
+	MultiLineEditBox::MultiLineEditBox( int x, 
+										int y, 
+										int width, 
+										int height, 
+										const tstring& text, 
+										unsigned long styles /* = */ ) : 
+	Object(x, y, width, height, styles), text(text) {}
 
 	void MultiLineEditBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 

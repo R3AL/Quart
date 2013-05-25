@@ -2,8 +2,8 @@
 
 namespace Quart
 {
-	Accelerator::Accelerator(int id, const Modifiers& modifierKeys, const vKeys& virtualKey) : 
-		Object(id, 0, 0) 
+	Accelerator::Accelerator(const Modifiers& modifierKeys, const vKeys& virtualKey) : 
+		Object(0, 0) 
 	{
  		this->accel.fVirt = static_cast<unsigned char>(modifierKeys) | FNOINVERT | FVIRTKEY;
  		this->accel.key   = static_cast<unsigned short>(virtualKey);

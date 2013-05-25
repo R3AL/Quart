@@ -14,7 +14,7 @@ namespace Quart
 		friend class MenuBar;
 		tstring text;
 	public:
-		SubmenuElement(unsigned int, const tstring&);
+		SubmenuElement(const tstring&);
 		void Create(HWND&);
 
 	private:

@@ -10,10 +10,9 @@ namespace Quart
     {
         tstring text;
     public:
-        PaintText(int id,
-             int x,
-             int y,
-             const tstring& text);
+        PaintText(int x,
+				  int y,
+				  const tstring& text);
 
         void Draw(HWND&,HDC&,PAINTSTRUCT&);
         LRESULT Proc(HWND,UINT,WPARAM,LPARAM);

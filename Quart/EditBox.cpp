@@ -3,14 +3,13 @@
 
 namespace Quart
 {
-	EditBox::EditBox(int id, 
-					 int x, 
+	EditBox::EditBox(int x, 
 					 int y, 
 					 int width, 
 					 int height, 
 					 const tstring& text, 
 					 HWND parent /* = nullptr */, 
-					 unsigned long styles /* = */ ) : Object(id, x, y, width, height, styles), text(text) {}
+					 unsigned long styles /* = */ ) : Object(x, y, width, height, styles), text(text) {}
 
 	void EditBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 

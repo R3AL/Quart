@@ -4,13 +4,12 @@
 
 namespace Quart
 {
-	ComboBox::ComboBox(int id, 
-					   int x, 
+	ComboBox::ComboBox(int x, 
 					   int y, 
 					   int width, 
 					   int height, 
 					   HWND parent /* = nullptr */, 
-					   unsigned long styles /* = */ ) : Object(id, x, y, width, height, styles) {}
+					   unsigned long styles /* = */ ) : Object(x, y, width, height, styles) {}
 
 	void ComboBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 

@@ -10,7 +10,7 @@ namespace Quart
 	Window::Window(unsigned int width, 
                    unsigned int height, 
                    const tstring& title,
-				   Window* parent)
+				   Window* parent) : objID(0)
     {
 		srand(static_cast<unsigned int>(time(NULL)));
 
@@ -158,7 +158,8 @@ namespace Quart
 
     void Window::Add(Object* obj)
     {
-        this->objects[obj->id] = ObjectPTR(obj);
+		obj->id                = this->objID++;
+		this->objects[obj->id] = ObjectPTR(obj);
     }
 
 	void Window::Add(MenuBar* mb)
@@ -168,12 +169,16 @@ namespace Quart
 		for(auto& element : mb->elements)
 		{
 			for(auto& subelement : element->subelements)
+			{
 				this->Add(subelement);
+			}
 		}
 	}
 
 	void Window::Add(Accelerator* accel)
 	{
+		accel->accel.cmd = accel->id = this->objID++;
+		
 		this->objects[accel->id]      = ObjectPTR(accel);
 		this->accelerators[accel->id] = accel;
 	}

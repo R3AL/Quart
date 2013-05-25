@@ -11,8 +11,7 @@ namespace Quart
 	public:
 		using Object::operator HWND;
 
-		ComboBox(int id,
-				 int x,
+		ComboBox(int x,
 				 int y,
 				 int width,
 				 int height,

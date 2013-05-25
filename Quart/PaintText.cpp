@@ -2,7 +2,7 @@
 
 namespace Quart
 {
-	PaintText::PaintText(int id, int x, int y, const tstring& text): Object(id, x, y), text(text) {}
+	PaintText::PaintText(int x, int y, const tstring& text): Object(x, y), text(text) {}
 
     void PaintText::Draw(HWND& hwnd, HDC& hdc, PAINTSTRUCT& ps)
     {

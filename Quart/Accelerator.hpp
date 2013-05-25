@@ -131,10 +131,11 @@ namespace Quart
 
 	class Accelerator : public Object
 	{
+		friend class Window;
+
 		ACCEL accel;
 	public:
-		Accelerator(int id,
-					const Modifiers& modifierKeys,
+		Accelerator(const Modifiers& modifierKeys,
 					const vKeys& virtualKey);
 
 		operator ACCEL();

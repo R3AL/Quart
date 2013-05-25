@@ -10,8 +10,7 @@ namespace Quart
 	public:
 		using Object::operator HWND;
 
-		ListView(int id,
-				 int x,
+		ListView(int x,
 				 int y,
 				 int width,
 				 int height,

@@ -2,14 +2,13 @@
 
 namespace Quart
 {
-    Button::Button(int id, 
-        int x, 
-        int y, 
-        int width, 
-        int height, 
-        const tstring& text, 
-        HWND parent, 
-        unsigned long styles) : Object(id, x, y, width, height, styles), text(text)
+    Button::Button(int x, 
+					int y, 
+					int width, 
+					int height, 
+					const tstring& text, 
+					HWND parent, 
+					unsigned long styles) : Object(x, y, width, height, styles), text(text)
     {
         this->parent = nullptr;
     }

@@ -41,6 +41,7 @@ namespace Quart
 
 		unsigned int width;
 		unsigned int height;
+		unsigned int objID;
 	public:
 		std::map<unsigned int, std::function<void(WPARAM,LPARAM)> > callback;
 
@@ -64,6 +65,7 @@ namespace Quart
 				unsigned short cursor    = (WORD)(IDC_ARROW),
 				unsigned short icon      = (WORD)(IDI_APPLICATION),
 				unsigned short iconSmall = (WORD)(IDI_APPLICATION));
+
 		void Close();
 		void Enable(bool = true);
 		void Disable();

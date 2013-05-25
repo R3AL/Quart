@@ -3,14 +3,13 @@
 
 namespace Quart
 {
-	ListView::ListView(int id, 
-					   int x, 
+	ListView::ListView(int x, 
 					   int y, 
 					   int width, 
 					   int height, 
 					   HWND parent /* = nullptr */, 
 					   unsigned long styles /* = */ ) : 
-	Object(id, x, y, width, height, styles), collumnsNumber(0) {}
+	Object(x, y, width, height, styles), collumnsNumber(0) {}
 
 	void ListView::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 

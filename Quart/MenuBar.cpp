@@ -3,8 +3,8 @@
 
 namespace Quart
 {
-	SubmenuElement::SubmenuElement(unsigned int id, const tstring& txt):
-		Object(id, 0, 0), text(txt) {}
+	SubmenuElement::SubmenuElement(const tstring& txt):
+		Object(0, 0), text(txt) {}
 
 	void SubmenuElement::Create(HWND&) {}
 	void SubmenuElement::Draw(HWND&,HDC&,PAINTSTRUCT&) {}

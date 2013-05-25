@@ -24,7 +24,6 @@ namespace Quart
     {
     protected:
         HWND handle;
-        WNDPROC oldproc;
     public:
         HWND parent;
         unsigned long styles;
@@ -36,13 +35,13 @@ namespace Quart
         
         std::map<unsigned int, std::function<void(WPARAM,LPARAM)> > callback;
 
-        Object(int id, int x, int y) : 
-            id(id), 
+        Object(int x, int y) : 
+			id(0),
             x(x), 
             y(y),
             handle(nullptr) {}
-        Object(int id, int x, int y, int width, int height, unsigned long styles) : 
-            id(id), 
+        Object(int x, int y, int width, int height, unsigned long styles) : 
+            id(0), 
             x(x),
             y(y),
             width(width), 

@@ -8,8 +8,7 @@ namespace Quart
 	{
 		tstring text;
 	public:
-		Label(int id,
-			  int x,
+		Label(int x,
 			  int y,
 			  int width,
 			  int height,

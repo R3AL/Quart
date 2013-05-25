@@ -8,8 +8,7 @@ namespace Quart
 	public:
 		using Object::operator HWND;
 
-		EditBox(int id,
-				int x,
+		EditBox(int x,
 				int y,
 				int width,
 				int height,

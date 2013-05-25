@@ -8,8 +8,7 @@ namespace Quart
     public:
         using Object::operator HWND;
 
-        Button(int id,
-               int x,
+        Button(int x,
                int y,
                int width,
                int height,

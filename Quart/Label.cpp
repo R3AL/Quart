@@ -2,14 +2,13 @@
 
 namespace Quart
 {
-	Label::Label(int id, 
-				 int x, 
+	Label::Label(int x, 
 				 int y, 
 				 int width, 
 				 int height, 
 				 const tstring& text, 
 				 HWND parent /* = nullptr */, 
-				 unsigned long styles /* = */ ): Object(id, x, y, width, height, styles), text(text) {}
+				 unsigned long styles /* = */ ): Object(x, y, width, height, styles), text(text) {}
 
 	void Label::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 
