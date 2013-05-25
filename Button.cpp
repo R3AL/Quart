@@ -34,17 +34,4 @@ namespace Quart
         ShowWindow(this->handle, SW_SHOW);
     }
 
-    LRESULT Button::Proc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
-    {
-        if(message == WM_LBUTTONDBLCLK)
-            MessageBox(NULL,L"DUBLU",NULL,NULL);
-        if(this->callback.count(message))
-        {
-            if(this->callback[message] != nullptr)
-                this->callback[message](wparam,lparam);
-        }
-
-        return 0;
-    }
-
 }

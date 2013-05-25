@@ -2,11 +2,8 @@
 
 namespace Quart
 {
-    //class Window;
     class Button : public Object
     {
-       // friend class Window;
-        
         tstring text;
     public:
         using Object::operator HWND;
@@ -24,7 +21,5 @@ namespace Quart
         void Draw(HWND&,HDC&,PAINTSTRUCT&);
         void Create(HWND&);
 
-    private:
-        LRESULT Proc(HWND,UINT,WPARAM,LPARAM);
     };
 }

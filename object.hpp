@@ -7,15 +7,19 @@
 
 # ifdef UNICODE
     typedef std::wstring tstring;
+	# define to_tstring(a) std::to_wstring(a)
     # define WIDEN2(x) L ## x 
     # define WIDEN(x) WIDEN2(x)
 # else
-    typedef std::string tstring;
+	typedef std::string tstring;
+	# define to_tstring(a) std::to_string(a)
     # define WIDEN(x) x
 # endif
 
 namespace Quart
 {
+	static const int SELF = -1;
+
     class Object
     {
     protected:
@@ -48,9 +52,10 @@ namespace Quart
         virtual ~Object()                             = 0;
         virtual void Draw(HWND&,HDC&,PAINTSTRUCT&)    = 0;
         virtual void Create(HWND&)                    = 0;
-        virtual LRESULT Proc(HWND,UINT,WPARAM,LPARAM) = 0;
+		virtual LRESULT Proc(HWND, UINT, WPARAM, LPARAM);
 
         operator HWND() { return handle; }
+		void Focus();
     };
 
     inline Object::~Object() {}
