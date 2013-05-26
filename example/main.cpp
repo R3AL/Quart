@@ -20,15 +20,17 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 {
 	using namespace Quart;
 
-	Window window(800, 600, "Title");
+	Window window(600, 250, "Title");
 
 	//  [ ] Creating a menu
-	auto menuBar = new MenuBar(&window);
-	auto saveSub = new SubmenuElement("&Save");
-	auto loadSub = new SubmenuElement("&Load");
-	auto exitSub = new SubmenuElement("E&xit");
+	auto menuBar  = new MenuBar(&window);
+	auto saveSub  = new SubmenuElement("&Save");
+	auto loadSub  = new SubmenuElement("&Load");
+	auto exitSub  = new SubmenuElement("E&xit");
+	auto aboutSub = new SubmenuElement("&About");
 
 	menuBar->Add(new MenuElement("&File", 3, saveSub, loadSub, exitSub));
+	menuBar->Add(new MenuElement("&Help", 1, aboutSub));
 
 		// [ ] Adding actions to submenu elements using lambdas
 		saveSub->callback[SELF] = [&](WPARAM, LPARAM)
@@ -58,6 +60,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 		exitSub->callback[SELF] = [&](WPARAM, LPARAM)
 		{
 			window.Close();
+		};
+
+		aboutSub->callback[SELF] = [](WPARAM, LPARAM)
+		{
+			Messagebox("Example application created using Quart C++11 library", "About");
 		};
 		// [/]
 
@@ -100,9 +107,15 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 		{
 			Window wnd(470, 480, "Controls examples", &window);
 
+<<<<<<< HEAD
 			auto labelEx        = new Label		  (10,  10, 100, 20, "This is a label !");
 			auto editboxEx      = new EditBox	  (120, 10, 150, 20, "This is an EditBox !");
 			auto buttonEx       = new Button	  (290, 10, 150, 20, "Get text from EditBox");
+=======
+			auto labelEx        = new Label			  (10,  10, 100, 20,  "This is a label !");
+			auto editboxEx      = new EditBox		  (120, 10, 150, 20,  "This is an EditBox !");
+			auto buttonEx       = new Button		  (290, 10, 150, 20,  "Get text from EditBox");
+>>>>>>> Fixed small bug that kept the process alive after window closing
 			auto multieditboxEx = new MultiLineEditBox(10,  60, 150, 150, "This is a MultiLineEditBox !");
 			auto comboboxEx     = new ComboBox	  (290, 60, 150, 20);
 			auto listviewEx     = new ListView	  (10, 220, 440, 200);
@@ -167,6 +180,9 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 		// [/]
 
 	// [/]
+
+	auto infoLbl = new Label(170, 10, 400, 200, "To use accelerators just press the specific key combination\n"
+		"For example: Control + S");
 	
 	window.Add(menuBar); // Window class takes ownership of these objects
 	window.Add(button1); // so no need to delete them
@@ -176,6 +192,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 	window.Add(accelerator1);
 	window.Add(accelerator2);
 	window.Add(accelerator3);
+	window.Add(infoLbl);
 
 	window.Create();
 

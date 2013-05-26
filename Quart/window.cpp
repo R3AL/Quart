@@ -148,6 +148,11 @@ namespace Quart
 		DestroyWindow(this->handle);
 	}
 
+	Window::~Window()
+	{
+		PostQuitMessage(0);
+	}
+
     void Window::Add(Object* obj)
     {
 		if(obj->id == 0)

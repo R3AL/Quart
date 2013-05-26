@@ -52,6 +52,7 @@ namespace Quart
 			   unsigned int height,
 			   const tstring& title,
 			   Window* parent = nullptr);
+		~Window();
 
         operator HWND();
 
