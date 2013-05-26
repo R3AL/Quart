@@ -37,9 +37,10 @@ namespace Quart
 		typedef std::unique_ptr<MenuElement> MenuElementPTR;
 		std::vector<MenuElementPTR> elements;
 		HMENU menu, submenu;
+		Window* parent;
 	public:
 		void Set(HWND&);
-		MenuBar();
+		MenuBar(Window*);
 		void Add(MenuElement*);
 	};
 }

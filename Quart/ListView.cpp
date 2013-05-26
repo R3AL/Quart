@@ -63,7 +63,7 @@ namespace Quart
 		for(unsigned i = 0; i < this->collumnsNumber; ++i)
 		{
 			lvi.iSubItem = i;
-			lvi.pszText = (LPTSTR)(va_arg(list, tstring).c_str());
+			lvi.pszText = (LPTSTR)(va_arg(list, TCHAR*));
 			
 			if(!i)
 				SendMessage(this->handle, LVM_INSERTITEM, 0, (LPARAM)&lvi);

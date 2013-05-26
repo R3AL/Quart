@@ -1,5 +1,6 @@
 #include "MenuBar.hpp"
 #include <cstdarg>
+# include "Window.hpp"
 
 namespace Quart
 {
@@ -25,7 +26,7 @@ namespace Quart
 		va_end(list);
 	}
 
-	MenuBar::MenuBar()
+	MenuBar::MenuBar(Window* parent) : parent(parent)
 	{
 		this->menu = CreateMenu();
 	}
@@ -42,7 +43,10 @@ namespace Quart
 		this->elements.emplace_back(MenuElementPTR(elem));
 
 		for(auto& subelem : elem->subelements)
+		{
+			subelem->id = this->parent->objID++;
 			AppendMenu(this->submenu, MF_STRING, subelem->id, subelem->text.c_str());
+		}
 
 		AppendMenu(this->menu, MF_STRING | MF_POPUP, (UINT)this->submenu, (LPTSTR)elem->text.c_str());
 	}

@@ -1,4 +1,4 @@
-# include "window.hpp"
+# include "Window.hpp"
 # include "Button.hpp"
 # include "MessageBox.hpp"
 
@@ -63,6 +63,8 @@ namespace Quart
 
 			if(!EXstyle)
 				EXstyle = WS_EX_DLGMODALFRAME;
+
+			this->parent->Disable();
 		}
 
 
@@ -100,14 +102,7 @@ namespace Quart
         return true;
     }
     
-	int Window::Run(unsigned long style,
-					unsigned long EXstyle,
-					int cmdShow,
-					int x,
-					int y,
-					unsigned short cursor,
-					unsigned short icon,
-					unsigned short iconSmall)
+	int Window::Run()
     {
 		auto count = this->accelerators.size();
 		auto accel = new ACCEL[count];
@@ -119,15 +114,12 @@ namespace Quart
 		auto accelTable = CreateAcceleratorTable(accel, count);
 		delete accel;
 
-		if(this->Create(style, EXstyle, cmdShow, x, y, cursor, icon, iconSmall))
+		while (GetMessage(&this->msg, nullptr, 0, 0))
 		{
-			while (GetMessage(&this->msg, nullptr, 0, 0))
+			if(!TranslateAccelerator(msg.hwnd, accelTable, &this->msg))
 			{
-				if(!TranslateAccelerator(msg.hwnd, accelTable, &this->msg))
-				{
-					TranslateMessage(&this->msg);
-					DispatchMessage(&this->msg);
-				}
+				TranslateMessage(&this->msg);
+				DispatchMessage(&this->msg);
 			}
 		}
 		return static_cast<int>(msg.wParam);
@@ -158,7 +150,9 @@ namespace Quart
 
     void Window::Add(Object* obj)
     {
-		obj->id                = this->objID++;
+		if(obj->id == 0)
+			obj->id = this->objID++;
+
 		this->objects[obj->id] = ObjectPTR(obj);
     }
 
@@ -236,6 +230,10 @@ namespace Quart
 			if(this->callback.count(message))
 				if(this->callback[message] != nullptr)
 					this->callback[message](wparam,lparam);
+
+			if(this->parent != nullptr)
+				this->parent->Enable();
+
 			PostQuitMessage(0);
             return 0;
 

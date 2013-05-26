@@ -20,6 +20,8 @@ namespace Quart
 {
 	class Window
 	{
+		friend class MenuBar;
+
         typedef std::unique_ptr<Object> ObjectPTR;
 		typedef std::unique_ptr<MenuBar> MenuBarPTR;
 
@@ -57,29 +59,23 @@ namespace Quart
 		void Add(MenuBar*);
 		void Add(Accelerator*);
         
-		int Run(unsigned long style      = WS_OVERLAPPEDWINDOW,
-				unsigned long EXstyle	 = NULL,
-				int cmdShow              = SW_SHOW,
-				int x                    = CW_USEDEFAULT,
-				int y                    = CW_USEDEFAULT,
-				unsigned short cursor    = (WORD)(IDC_ARROW),
-				unsigned short icon      = (WORD)(IDI_APPLICATION),
-				unsigned short iconSmall = (WORD)(IDI_APPLICATION));
+		int Run();
 
 		void Close();
 		void Enable(bool = true);
 		void Disable();
 
+		bool Create(unsigned long style      = WS_OVERLAPPEDWINDOW,
+					unsigned long EXstyle	 = NULL,
+					int cmdShow              = SW_SHOW,
+					int x                    = CW_USEDEFAULT,
+					int y                    = CW_USEDEFAULT,
+					unsigned short cursor    = (WORD)(IDC_ARROW),
+					unsigned short icon      = (WORD)(IDI_APPLICATION),
+					unsigned short iconSmall = (WORD)(IDI_APPLICATION));
+
     private:
         static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);
         LRESULT WindowProc(HWND,UINT,WPARAM,LPARAM);
-        bool Create(unsigned long style,
-					unsigned long EXstyle,
-					int cmdShow,
-					int x,
-					int y,
-					unsigned short cursor,
-					unsigned short icon,
-					unsigned short iconSmall);
 	};
 }

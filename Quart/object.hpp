@@ -53,7 +53,10 @@ namespace Quart
         virtual void Create(HWND&)                    = 0;
 		virtual LRESULT Proc(HWND, UINT, WPARAM, LPARAM);
 
-        operator HWND() { return handle; }
+        operator HWND();
+
+		void SelfCall();
+
 		void Focus();
     };
 

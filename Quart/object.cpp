@@ -23,4 +23,14 @@ namespace Quart
 	{
 		SetFocus(this->handle);
 	}
+
+	Object::operator HWND() 
+	{ 
+		return handle; 
+	}
+
+	void Object::SelfCall()
+	{
+		this->callback[SELF](0, 0);
+	}
 }
