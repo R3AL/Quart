@@ -26,5 +26,7 @@ namespace Quart
 	void RemoveItem(unsigned int index);
 	void ScrollTo(unsigned int index);
 	void Clear();
+	int Count();
+	int GetSelectedIndex();
 	};
 }

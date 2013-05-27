@@ -10,7 +10,7 @@ namespace Quart
 	Window::Window(unsigned int width, 
                    unsigned int height, 
                    const tstring& title,
-		   Window* parent) : objID(0)
+				   Window* parent) : objID(1)
     {
 		srand(static_cast<unsigned int>(time(NULL)));
 
@@ -26,7 +26,7 @@ namespace Quart
     }
 
     bool Window::Create(unsigned long style,
-			unsigned long EXstyle,
+						unsigned long EXstyle,
                         int cmdShow, 
                         int x, 
                         int y, 
@@ -102,7 +102,7 @@ namespace Quart
         return true;
     }
     
-    int Window::Run()
+	int Window::Run()
     {
 		auto count = this->accelerators.size();
 		auto accel = new ACCEL[count];
@@ -117,10 +117,11 @@ namespace Quart
 		while (GetMessage(&this->msg, nullptr, 0, 0))
 		{
 			if(!TranslateAccelerator(msg.hwnd, accelTable, &this->msg))
-			{
-				TranslateMessage(&this->msg);
-				DispatchMessage(&this->msg);
-			}
+				if(!IsDialogMessage(handle, &msg))
+				{
+					TranslateMessage(&this->msg);
+					DispatchMessage(&this->msg);
+				}
 		}
 		return static_cast<int>(msg.wParam);
     }
@@ -150,7 +151,7 @@ namespace Quart
 
 	Window::~Window()
 	{
-		PostQuitMessage(0);
+		DestroyWindow(this->handle);
 	}
 
     void Window::Add(Object* obj)
@@ -161,26 +162,26 @@ namespace Quart
 		this->objects[obj->id] = ObjectPTR(obj);
     }
 
-    void Window::Add(MenuBar* mb)
-    {
-	this->menuBar = MenuBarPTR(mb);
-	
-	for(auto& element : mb->elements)
+	void Window::Add(MenuBar* mb)
 	{
-		for(auto& subelement : element->subelements)
+		this->menuBar = MenuBarPTR(mb);
+		
+		for(auto& element : mb->elements)
 		{
-			this->Add(subelement);
+			for(auto& subelement : element->subelements)
+			{
+				this->Add(subelement);
+			}
 		}
 	}
-}
-	
-    void Window::Add(Accelerator* accel)
-    {
-	accel->accel.cmd = accel->id = this->objID++;
+
+	void Window::Add(Accelerator* accel)
+	{
+		accel->accel.cmd = accel->id = this->objID++;
 		
-	this->objects[accel->id]      = ObjectPTR(accel);
-	this->accelerators[accel->id] = accel;
-}
+		this->objects[accel->id]      = ObjectPTR(accel);
+		this->accelerators[accel->id] = accel;
+	}
 
     LRESULT Window::_wndproc(HWND a, UINT b, WPARAM c, LPARAM d)
     {
@@ -229,6 +230,7 @@ namespace Quart
 
         case WM_COMMAND:
              return objects[LOWORD(wparam)]->Proc(hwnd,HIWORD(wparam),wparam,lparam);
+            //return DefWindowProc (hwnd, message, wparam, lparam);
 
         case WM_DESTROY:
 			if(this->callback.count(message))
@@ -240,7 +242,15 @@ namespace Quart
 
 			PostQuitMessage(0);
             return 0;
-
+		
+		case WM_KEYDOWN:
+			if(this->callback.count(message))
+			{
+				if(this->callback[message] != nullptr)
+					this->callback[message](wparam,lparam);
+			}
+			return 0;
+		
 		default:
 			if(this->callback.count(message))
 			{

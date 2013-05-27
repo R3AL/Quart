@@ -9,7 +9,8 @@ namespace Quart
 					   int height, 
 					   HWND parent /* = nullptr */, 
 					   unsigned long styles /* = */ ) : 
-	Object(x, y, width, height, styles), collumnsNumber(0) {}
+	Object(x, y, width, height, styles), 
+	collumnsNumber(0) {}
 
 	void ListView::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
 
@@ -53,9 +54,9 @@ namespace Quart
 	void ListView::AddItem(unsigned int index, ...)
 	{
 		LVITEM lvi;
-		lvi.mask = LVIF_TEXT;
+		lvi.mask       = LVIF_TEXT;
 		lvi.cchTextMax = 256;
-		lvi.iItem = index;
+		lvi.iItem      = index;
 
 		va_list list;
 		va_start(list, index);
@@ -82,15 +83,40 @@ namespace Quart
 	void ListView::ScrollTo(unsigned int index)
 	{
 		ListView_EnsureVisible(this->handle, index, false);
+		ListView_SetItemState(this->handle, -1, 0, LVIS_SELECTED); // unselect everything
 		ListView_SetItemState(this->handle, index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+	}
+
+	int ListView::Count()
+	{
+		return (int)(ListView_GetItemCount(this->handle));
+	}
+
+	int ListView::GetSelectedIndex()
+	{
+		int retval = -1;
+
+		auto i   = 0;
+		auto end = this->Count();
+
+		while(i++ != end)
+		{
+			if(ListView_GetItemState(this->handle, i, LVIS_SELECTED) == LVIS_SELECTED)
+			{
+				retval = i;
+				break;
+			}
+		}
+
+		return retval;
 	}
 
 	void ListView::EditItem(unsigned int index, ...)
 	{
 		LVITEM lvi;
-		lvi.mask = LVIF_TEXT;
+		lvi.mask       = LVIF_TEXT;
 		lvi.cchTextMax = 256;
-		lvi.iItem = index;
+		lvi.iItem      = index;
 
 		va_list list;
 		va_start(list, index);
@@ -98,7 +124,7 @@ namespace Quart
 		for(unsigned int i = 0; i < this->collumnsNumber; ++i)
 		{
 			lvi.iSubItem = i;
-			lvi.pszText = (LPTSTR)(va_arg(list, tstring).c_str());
+			lvi.pszText  = (LPTSTR)(va_arg(list, tstring).c_str());
 			SendMessage(this->handle, LVM_SETITEM, 0, (LPARAM)&lvi);
 		}
 

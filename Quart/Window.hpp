@@ -26,22 +26,22 @@ namespace Quart
 	{
 		friend class MenuBar;
 
-	        typedef std::unique_ptr<Object> ObjectPTR;
+        typedef std::unique_ptr<Object> ObjectPTR;
 		typedef std::unique_ptr<MenuBar> MenuBarPTR;
 
-        	std::unordered_map<int, ObjectPTR> objects;
+        std::unordered_map<int, ObjectPTR> objects;
 		std::unordered_map<int, Accelerator*> accelerators;
 
 		Window* parent;
 
-	        HINSTANCE instance;
+        HINSTANCE instance;
 		HACCEL accelTable;
 		ACCEL* accels;
-        	HWND handle;
-        	MSG msg;
+        HWND handle;
+        MSG msg;
 
-	        tstring windowName;
-        	tstring className;
+        tstring windowName;
+        tstring className;
 
 		MenuBarPTR menuBar;
 
@@ -58,9 +58,9 @@ namespace Quart
 			   Window* parent = nullptr);
 		~Window();
 
-	        operator HWND();
+        operator HWND();
 
-        	void Add(Object*);
+        void Add(Object*);
 		void Add(MenuBar*);
 		void Add(Accelerator*);
         
@@ -80,7 +80,7 @@ namespace Quart
 					unsigned short iconSmall = (WORD)(IDI_APPLICATION));
 
     private:
-	        static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);
-        	LRESULT WindowProc(HWND,UINT,WPARAM,LPARAM);
+        static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);
+        LRESULT WindowProc(HWND,UINT,WPARAM,LPARAM);
 	};
 }
