@@ -100,12 +100,12 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 		{
 			Window wnd(470, 480, "Controls examples", &window);
 
-			auto labelEx        = new Label			  (10,  10, 100, 20, "This is a label !");
-			auto editboxEx      = new EditBox		  (120, 10, 150, 20, "This is an EditBox !");
-			auto buttonEx       = new Button		  (290, 10, 150, 20, "Get text from EditBox");
+			auto labelEx        = new Label		  (10,  10, 100, 20, "This is a label !");
+			auto editboxEx      = new EditBox	  (120, 10, 150, 20, "This is an EditBox !");
+			auto buttonEx       = new Button	  (290, 10, 150, 20, "Get text from EditBox");
 			auto multieditboxEx = new MultiLineEditBox(10,  60, 150, 150, "This is a MultiLineEditBox !");
-			auto comboboxEx     = new ComboBox		  (290, 60, 150, 20);
-			auto listviewEx     = new ListView		  (10, 220, 440, 200);
+			auto comboboxEx     = new ComboBox	  (290, 60, 150, 20);
+			auto listviewEx     = new ListView	  (10, 220, 440, 200);
 
 			buttonEx->callback[SELF] = [&](WPARAM, LPARAM)
 			{
