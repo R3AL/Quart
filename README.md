@@ -30,9 +30,8 @@ And that's it ! You can now use **Quart** ! (start by compiling the example)
 API Refference
 ==============
 
-***Classes***
-
-- **Window**
+**Window**
+==========
 
   **Parameters**
   - **width**  ( *unsigned int* )
@@ -64,7 +63,8 @@ API Refference
   - **Add** : adds an object to the window ( *Object** or *MenuBar** or *Accelerator** )
   - **operator HWND()** : conversion operator to HWND
 
-- **Label**
+**Label**
+=========
   
   **Parameters**
   - **x coordonate** ( *int* )
@@ -75,7 +75,8 @@ API Refference
   - **parent** ( *HWND* = **nullptr** )
   - **styles** ( *unsigned long* = **WS_CHILD | WS_VISIBLE** )
 
-- **Button**
+**Button**
+==========
   
   **Parameters**
   - **x coordonate** ( *int* )
@@ -103,7 +104,8 @@ API Refference
        ```
        More on C++11 lambdas [here](http://en.cppreference.com/w/cpp/language/lambda).
 
-- **EditBox**
+**EditBox**
+===========
 
   **Parameters**
   - **x coordonate** ( *int* )
@@ -122,7 +124,8 @@ API Refference
       **Parameters**
       - **text** ( *string* )
 
-- **MultiLineEditBox**
+**MultiLineEditBox**
+====================
   
   **Parameters**
   - **x coordonate** ( *int* )
@@ -136,7 +139,8 @@ API Refference
   **Member functions**
   - **GetText** : returns text inside control (string)
 
-- **ComboBox**
+**ComboBox**
+============
 
   **Parameters**
   - **x coordonate** ( *int* )
@@ -159,7 +163,8 @@ API Refference
       
   - **SelectionIndex** : gets the current selection index ( *unsigned int* )( *const* )
 
-- **ListView**
+**ListView**
+============
 
   **Parameters**
   - **x coordonate** ( *int* )
@@ -207,87 +212,92 @@ API Refference
   - **Count** : gets the number of items in control ( *int* )
   - **Clear** : clears all items from control
 
-- **SubmenuElement**
+**SubmenuElement**
+==================
 
-    **Parameters**
-    - **text** ( *string* )
+   **Parameters**
+   - **text** ( *string* )
     
-- **MenuElement**
+**MenuElement**
+===============
   
-    **Parameters**
-    - **text** ( *string* )
-    - **SubmenuElements count** ( *unsigned int* )
-    - **...** ( *SubmenuElement** )
+   **Parameters**
+   - **text** ( *string* )
+   - **SubmenuElements count** ( *unsigned int* )
+   - **...** ( *SubmenuElement** )
 
-- **MenuBar**
+**MenuBar**
+===========
 
-    **Parameters**
-    - **parent** ( *Window** )
-    
-    **Member functions**
-    - **Add** : adds an element to the control
-        
-        **Parameters**
-        - **element** ( *MenuElement** )
-    
-    **Note** : example of creating and using a MenuBar:
-    
-    ```C++
-    Window window(800, 600, "Title");
-    
-    auto menuBar        = new MenuBar(&window);
-    auto loadSubelement = new SubmenuElement("&Load"); // '&' used to access the menu using ALT + letter key after ampersand
-    auto saveSubelement = new SubmenuElement("&Save");
-    
-    loadSubelement->callback[SELF] = [](WPARAM, LPARAM)
-    {
-      // Add code here
-    };
-    
-    saveSubelement->callback[SELF] = [](WPARAM, LPARAM)
-    {
-      // Add code here
-    };
-    
-    menuBar->Add(new MenuElement("&File", 2, loadSubelement, saveSubelement));
-    
-    window.Add(menuBar);
-    ...
-    ```
+   **Parameters**
+   - **parent** ( *Window** )
+   
+   **Member functions**
+   - **Add** : adds an element to the control
+       
+       **Parameters**
+       - **element** ( *MenuElement** )
+   
+   **Note** : example of creating and using a MenuBar:
+   
+   ```C++
+   Window window(800, 600, "Title");
+   
+   auto menuBar        = new MenuBar(&window);
+   auto loadSubelement = new SubmenuElement("&Load"); // '&' used to access the menu using ALT + letter key after ampersand
+   auto saveSubelement = new SubmenuElement("&Save");
+   
+   loadSubelement->callback[SELF] = [](WPARAM, LPARAM)
+   {
+     // Add code here
+   };
+   
+   saveSubelement->callback[SELF] = [](WPARAM, LPARAM)
+   {
+     // Add code here
+   };
+   
+   menuBar->Add(new MenuElement("&File", 2, loadSubelement, saveSubelement));
+   
+   window.Add(menuBar);
+   ...
+   ```
 
-- **Accelerator**
+**Accelerator**
+===============
 
-    **Parameters**
-    - **modifier key** ( *Modifiers* )
-    - **virtual key** ( *vKeys* )
+   **Parameters**
+   - **modifier key** ( *Modifiers* )
+   - **virtual key** ( *vKeys* )
+   
+   **Note** : click [here](https://github.com/R3AL/Quart/blob/master/Quart/Accelerator.hpp) for parameter values.
     
-    **Note** : click [here](https://github.com/R3AL/Quart/blob/master/Quart/Accelerator.hpp) for parameter values.
     
-    
-- **OpenFileDialog**
+**OpenFileDialog**
+==================
 
-    **Parameters**
-    - **parent** ( *Window* )
-    - **filter** ( *string* )
+   **Parameters**
+   - **parent** ( *Window* )
+   - **filter** ( *string* )
+   
+   **Member functions**
+   - **Get** : returns path to selected file ( *string* )( *const* )
     
-    **Member functions**
-    - **Get** : returns path to selected file ( *string* )( *const* )
-    
-- **SaveFileDialog**
+**SaveFileDialog**
+==================
 
-    **Parameters**
-    - **parent** ( *Window* )
-    - **filter** ( *string* )
-    
-    **Member functions**
-    - **Get** : returns path to selected file ( *string* )( *const* )
+   **Parameters**
+   - **parent** ( *Window* )
+   - **filter** ( *string* )
+   
+   **Member functions**
+   - **Get** : returns path to selected file ( *string* )( *const* )
 
-***Functions***
-
-- **Messagebox**
+**Messagebox**
+==============
   
-    **Parameters**
-    - **text** ( *string* )
-    - **title** ( *string* = **empty** )
-    - **parent** ( *Window** = **nullptr** )
+   **Parameters**
+   - **text** ( *string* )
+   - **title** ( *string* = **empty** )
+   - **parent** ( *Window** = **nullptr** )
   
