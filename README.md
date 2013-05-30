@@ -14,7 +14,7 @@ First of all you will need a compiler that supports **C++11**:
 - **GCC** ( 4.4+ )
 - **ICC** ( 12.1+ )
 
-Actual installation is rather easy, just add the path to the **'Quart'** folder to your include path:
+~~Actual installation is rather easy, just add the path to the **'Quart'** folder to your include path:
 
 - ***Code::Blocks***
 
@@ -22,7 +22,7 @@ Actual installation is rather easy, just add the path to the **'Quart'** folder 
 
 - ***Visual Studio***
 
-*Project proprieties -> Configuration proprieties -> C/C++ -> Additional include directories*
+*Project proprieties -> Configuration proprieties -> C/C++ -> Additional include directories*~~
 
 
 And that's it ! You can now use **Quart** ! (start by compiling the example)
