@@ -1,22 +1,31 @@
-#pragma once
+# pragma once
 
-#include "object.hpp"
+# include "Controller.hpp"
+
+# include <functional>
 
 namespace Quart
 {
-	class Label : public Object
+	class Label : public Controller
 	{
+	private:
+		int x, y, width, height;
 		tstring text;
+		unsigned long style;
+
 	public:
+		std::function<void()> OnClick,
+			OnDbClick;
+
 		Label(int x,
 			  int y,
 			  int width,
 			  int height,
 			  const tstring& text,
-			  HWND parent = nullptr,
-			  unsigned long styles = (WS_CHILD | WS_VISIBLE) );
+			  unsigned long style = (WS_CHILD | WS_VISIBLE | SS_NOTIFY) );
 
-		void Draw(HWND&,HDC&,PAINTSTRUCT&);
-		void Create(HWND&);
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 }

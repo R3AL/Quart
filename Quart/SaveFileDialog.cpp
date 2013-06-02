@@ -1,4 +1,4 @@
-#include "SaveFileDialog.hpp"
+# include "SaveFileDialog.hpp"
 
 namespace Quart
 {
@@ -13,7 +13,7 @@ namespace Quart
 			leFilter[i++] = letter;
 
 		ofn.lStructSize     = sizeof(ofn);
-		ofn.hwndOwner       = parent;
+		ofn.hwndOwner       = parent.GetHandle();
 		ofn.lpstrFilter		= leFilter;
 		ofn.lpstrFile       = FileName;
 		ofn.lpstrInitialDir = WIDEN(".");

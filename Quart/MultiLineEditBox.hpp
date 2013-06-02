@@ -1,28 +1,39 @@
-#pragma once
+# pragma once
 
-#include "object.hpp"
+# include "Controller.hpp"
+# include "EditBox.hpp"
+
+# include <functional>
 
 namespace Quart
 {
-	class MultiLineEditBox : public Object
+	class MultilineEditBox : public Controller
 	{
-		tstring text;
-
+		EditBox eb;
 	public:
-		using Object::operator HWND;
+		std::function<void()> &OnTextChanged,
+			&OnFocus,
+			&OnFocusLost,
+			&OnExceedingText;
 
-		MultiLineEditBox(int x,
-						int y,
-						int width,
-						int height,
-						const tstring& text,
-						unsigned long styles = (WS_CHILD | WS_VISIBLE | ES_LEFT | WS_VSCROLL | ES_AUTOVSCROLL) );
-
-		void Draw(HWND&,HDC&,PAINTSTRUCT&);
-
-		void Create(HWND&);
+		MultilineEditBox(int x,
+						 int y,
+						 int width,
+						 int height,
+						 const tstring& text = WIDEN(""),
+						 unsigned long style = (WS_CHILD		|
+												WS_VISIBLE		|
+												WS_VSCROLL		|
+												ES_LEFT			|
+												ES_AUTOVSCROLL) );
 
 		tstring GetText() const;
+		void SetText(const tstring&);
+		void Clear();
+		void LimitText(unsigned int);
 
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 }

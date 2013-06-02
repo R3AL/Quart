@@ -1,36 +1,39 @@
-#include "EditBox.hpp"
-#include <windowsx.h>
+# include "EditBox.hpp"
+# include "Window.hpp"
 
 namespace Quart
 {
-	EditBox::EditBox(int x, 
-					 int y, 
-					 int width, 
-					 int height, 
-					 const tstring& text, 
-					 HWND parent /* = nullptr */, 
-					 unsigned long styles /* = */ ) : Object(x, y, width, height, styles), text(text) {}
-
-	void EditBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
-
-	void EditBox::Create(HWND& parent)
+	EditBox::EditBox(int x, int y, int width, int height, const tstring& text, unsigned long style /* = */ ):
+		Controller(Controller::EDITBOX),
+		x(x), y(y), width(width), height(height), text(text), style(style), IgnoreTextChange(true),
+		OnTextChanged(nullptr), OnFocus(nullptr), OnFocusLost(nullptr), OnExceedingText(nullptr)
 	{
-		this->parent = parent;
 
-		this->handle = CreateWindowEx(NULL,
+	}
+
+	void EditBox::Create(Window* parent)
+	{
+		this->handle = CreateWindowEx(
+			0,
 			WIDEN("EDIT"),
 			this->text.c_str(),
-			this->styles,
+			this->style,
 			this->x,
 			this->y,
 			this->width,
 			this->height,
-			this->parent,
+			parent->GetHandle(),
 			(HMENU)this->id,
-			(HINSTANCE)GetWindowLongPtr(this->parent, GWL_HINSTANCE),
-			NULL);
+			GetModuleHandle(0),
+			nullptr);
 
-		ShowWindow(this->handle, SW_SHOW);
+		if(!this->handle)
+		{
+			ERRORMB();
+			return;
+		}
+
+		this->IgnoreTextChange = false;
 	}
 
 	tstring EditBox::GetText() const
@@ -46,13 +49,51 @@ namespace Quart
 		return tmp;
 	}
 
-	void EditBox::SetText(const tstring& txt)
+	void EditBox::SetText(const tstring& text)
 	{
-		Edit_SetText(this->handle, txt.c_str());
+		SetWindowText(this->handle, static_cast<LPCTSTR>(text.c_str()) );
 	}
 
 	void EditBox::Clear()
 	{
-		Edit_SetText(this->handle, "");
+		this->SetText(WIDEN(""));
+	}
+
+	void EditBox::LimitText(unsigned int limit)
+	{
+		SendMessage(this->handle, EM_LIMITTEXT, (WPARAM)limit, 0);
+	}
+
+	void EditBox::MsgHandler(WPARAM wparam, LPARAM lparam)
+	{
+		switch (wparam)
+		{
+		case EN_CHANGE:
+			{
+				if(!this->IgnoreTextChange && this->OnTextChanged != nullptr)
+					this->OnTextChanged();
+			}break;
+
+		case EN_SETFOCUS:
+			{
+				if(this->OnFocus != nullptr)
+					this->OnFocus();
+			}break;
+
+		case EN_KILLFOCUS:
+			{
+				if(this->OnFocusLost != nullptr)
+					this->OnFocusLost();
+			}break;
+
+		case EN_MAXTEXT:
+			{
+				if(this->OnExceedingText != nullptr)
+					this->OnExceedingText();
+			}break;
+
+		default:
+			break;
+		}
 	}
 }

@@ -1,29 +1,45 @@
-# include "object.hpp"
-# include <vector>
+# pragma once
+
+# include "Controller.hpp"
+
+# include <functional>
 
 namespace Quart
 {
-	class Window;
-	class ComboBox : public Object
+	class ComboBox : public Controller
 	{
-		friend class Window;
-		std::vector<tstring> items;
+	private:
+		int x, y, width, height;
+		unsigned long style;
+		unsigned int elementCount;
+
 	public:
-		using Object::operator HWND;
+		std::function<void()> OnListClose,
+			OnListOpen,
+			OnElementEdit,
+			OnFocus,
+			OnFocusLost,
+			OnSelectionChanged,
+			OnSelectionCanceled;
 
 		ComboBox(int x,
 				 int y,
 				 int width,
 				 int height,
-				 HWND parent = nullptr,
-				 unsigned long styles = (CBS_DROPDOWN | CBS_HASSTRINGS | WS_CHILD | WS_OVERLAPPED | WS_VISIBLE) );
-		
-		void Draw(HWND&,HDC&,PAINTSTRUCT&);
-		void Create(HWND&);
+				 unsigned long style = (WS_CHILD	   |
+										WS_VISIBLE	   |
+										WS_OVERLAPPED  |
+										CBS_HASSTRINGS |
+										CBS_DROPDOWN));
 
-		void Add(const tstring&);
-		void Remove(const unsigned int);
-		unsigned int SelectionIndex() const;
+		void Add(const tstring& text);
+		void Remove(unsigned int index);
+		unsigned int Count() const;
+		int SelectionIndex() const;
+		void Select(unsigned int index);
 
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 }

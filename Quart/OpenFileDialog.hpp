@@ -1,17 +1,17 @@
-#pragma once
+# pragma once
 
-#include "object.hpp"
-#include <windows.h>
-#include "window.hpp"
+# include "Controller.hpp"
+# include "Window.hpp"
 
 namespace Quart
 {
 	class OpenFileDialog
 	{
+	private:
 		tstring retStr;
-	public:
 
-		OpenFileDialog(Window&, const tstring& filter);
+	public:
+		OpenFileDialog(Window& parent, const tstring& filter = WIDEN("All files\0*.*"));
 
 		tstring Get() const;
 	};

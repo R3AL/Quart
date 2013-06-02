@@ -1,24 +1,42 @@
-# include "object.hpp"
+# pragma once
+
+# include "Controller.hpp"
+
+# include <functional>
 
 namespace Quart
 {
-    class Button : public Object
-    {
-        tstring text;
-    public:
-        using Object::operator HWND;
+	class Button : public Controller
+	{
+		friend class UpDown;
 
-        Button(int x,
-               int y,
-               int width,
-               int height,
-               const tstring& text,
-               HWND parent = nullptr,
-               unsigned long styles = (WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON)
-               );
+	private:
+		int x, y, width, height;
+		tstring text;
+		unsigned long style;
 
-        void Draw(HWND&,HDC&,PAINTSTRUCT&);
-        void Create(HWND&);
+	public:
+		std::function<void()> OnClick,
+			OnDbClick,
+			OnFocus,
+			OnFocusLost;
+		
+		Button(int x,
+			   int y,
+			   int width,
+			   int height,
+			   const tstring& text,
+			   unsigned long style = (WS_TABSTOP	   | 
+									  WS_VISIBLE	   | 
+									  WS_CHILD		   | 
+									  BS_DEFPUSHBUTTON |
+									  BS_NOTIFY));
 
-    };
+		tstring GetText() const;
+		void SetText(const tstring& text);
+
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
+	};
 }

@@ -1,8 +1,8 @@
 # pragma once
 
-# include "object.hpp"
+# include "Controller.hpp"
 
-# include <unordered_map>
+# include <functional>
 
 namespace Quart
 {
@@ -14,7 +14,7 @@ namespace Quart
 		NONE    = 0
 	};
 
-	static enum class vKeys : unsigned short
+	static enum class Keys : unsigned short
 	{
 		Mouse_left_btn   = VK_LBUTTON,
 		Mouse_right_btn  = VK_RBUTTON,
@@ -129,19 +129,23 @@ namespace Quart
 		Key_Z            = 0x5A
 	};
 
-	class Accelerator : public Object
+	class Accelerator : public Controller
 	{
 		friend class Window;
 
+	private:
 		ACCEL accel;
+
 	public:
+		std::function<void()> OnFire;
+
 		Accelerator(const Modifiers& modifierKeys,
-					const vKeys& virtualKey);
+					const Keys& Key);
 
 		operator ACCEL();
 
-		void Draw(HWND&,HDC&,PAINTSTRUCT&);
-		void Create(HWND&);
-		LRESULT Proc(HWND, UINT, WPARAM, LPARAM);
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 }

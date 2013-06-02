@@ -1,46 +1,44 @@
-#include "ListView.hpp"
-#include <cstdarg>
+# include "ListView.hpp"
+# include "Window.hpp"
+
+# include <cstdarg>
 
 namespace Quart
 {
-	ListView::ListView(int x, 
-					   int y, 
-					   int width, 
-					   int height, 
-					   HWND parent /* = nullptr */, 
-					   unsigned long styles /* = */ ) : 
-	Object(x, y, width, height, styles), 
-	collumnsNumber(0) {}
-
-	void ListView::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
-
-	void ListView::Create(HWND& parent)
+	ListView::ListView(int x, int y, int width, int height, unsigned long style /* = */ ):
+		Controller(Controller::LISTVIEW),
+		x(x), y(y), width(width), height(height), style(style),
+		collumnsNumber(0)
 	{
-		this->parent = parent;
 
-		this->handle = CreateWindowEx(NULL,
-			WC_LISTVIEW,
-			WIDEN(""),
-			this->styles,
+	}
+
+	void ListView::Create(Window* parent)
+	{
+		this->handle = CreateWindowEx(
+			0,
+			WIDEN("SysListView32"),
+			nullptr,
+			this->style,
 			this->x,
 			this->y,
 			this->width,
 			this->height,
-			this->parent,
+			parent->GetHandle(),
 			(HMENU)this->id,
-			(HINSTANCE)GetWindowLongPtr(this->parent, GWL_HINSTANCE),
-			NULL);
+			GetModuleHandle(0),
+			nullptr);
 
-		ShowWindow(this->handle, SW_SHOW);
-		ListView_SetExtendedListViewStyleEx(this->handle, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+		if(!this->handle)
+			ERRORMB();
 	}
 
-	void ListView::AddCollumn(const tstring& txt, int index, unsigned int width)
+	void ListView::AddCollumn(const tstring& text, int index /* = -1 */, unsigned int width /* = 100 */)
 	{
 		LVCOLUMN lvc;
-		lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-		lvc.pszText = (LPTSTR)txt.c_str();
-		lvc.cx = width;
+		lvc.mask    = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
+		lvc.pszText = (LPTSTR)text.c_str();
+		lvc.cx      = width;
 
 		if(index == -1)
 			ListView_InsertColumn(this->handle, this->collumnsNumber++, &lvc);
@@ -65,7 +63,7 @@ namespace Quart
 		{
 			lvi.iSubItem = i;
 			lvi.pszText = (LPTSTR)(va_arg(list, TCHAR*));
-			
+
 			if(!i)
 				SendMessage(this->handle, LVM_INSERTITEM, 0, (LPARAM)&lvi);
 			else
@@ -82,33 +80,35 @@ namespace Quart
 
 	void ListView::ScrollTo(unsigned int index)
 	{
-		ListView_EnsureVisible(this->handle, index, false);
-		ListView_SetItemState(this->handle, -1, 0, LVIS_SELECTED); // unselect everything
-		ListView_SetItemState(this->handle, index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		SendMessage(this->handle, LVM_ENSUREVISIBLE, index, MAKELPARAM(false, 0));
 	}
 
-	int ListView::Count()
+	void ListView::Select(unsigned int index)
 	{
-		return (int)(ListView_GetItemCount(this->handle));
+		LV_ITEM li;
+		li.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
+		li.state = LVIS_SELECTED | LVIS_FOCUSED;
+
+		SendMessage(this->handle, LVM_SETITEMSTATE, index, reinterpret_cast<LPARAM>(&li));
 	}
 
-	int ListView::GetSelectedIndex()
+	void ListView::Unselect(unsigned int index /* = -1 */)
 	{
-		int retval = -1;
+		LV_ITEM li;
+		li.stateMask = LVIS_SELECTED;
+		li.state     = 0;
 
-		auto i   = 0;
-		auto end = this->Count();
+		SendMessage(this->handle, LVM_SETITEMSTATE, index, reinterpret_cast<LPARAM>(&li) );
+	}
 
-		while(i++ != end)
-		{
-			if(ListView_GetItemState(this->handle, i, LVIS_SELECTED) == LVIS_SELECTED)
-			{
-				retval = i;
-				break;
-			}
-		}
+	int ListView::Count() const
+	{
+		return static_cast<int>(SendMessage(this->handle, LVM_GETITEMCOUNT, 0, 0));
+	}
 
-		return retval;
+	void ListView::Clear()
+	{
+		SendMessage(this->handle, LVM_DELETEALLITEMS, 0, 0);
 	}
 
 	void ListView::EditItem(unsigned int index, ...)
@@ -124,15 +124,19 @@ namespace Quart
 		for(unsigned int i = 0; i < this->collumnsNumber; ++i)
 		{
 			lvi.iSubItem = i;
-			lvi.pszText  = (LPTSTR)(va_arg(list, tstring).c_str());
+			lvi.pszText  = (LPTSTR)(va_arg(list, TCHAR));
 			SendMessage(this->handle, LVM_SETITEM, 0, (LPARAM)&lvi);
 		}
 
 		va_end(list);
 	}
 
-	void ListView::Clear()
+	void ListView::MsgHandler(WPARAM wparam, LPARAM lparam)
 	{
-		ListView_DeleteAllItems(this->handle);
+// 		switch (wparam)
+// 		{
+// 		default:
+//			break;
+// 		}
 	}
 }

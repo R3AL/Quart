@@ -1,55 +1,115 @@
-#include "ComboBox.hpp"
-#include <CommCtrl.h>
-#include <windowsx.h>
+# include "ComboBox.hpp"
+# include "Window.hpp"
+
+# include <windowsx.h>
 
 namespace Quart
 {
-	ComboBox::ComboBox(int x, 
-					   int y, 
-					   int width, 
-					   int height, 
-					   HWND parent /* = nullptr */, 
-					   unsigned long styles /* = */ ) : Object(x, y, width, height, styles) {}
-
-	void ComboBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
-
-	void ComboBox::Create(HWND& parent)
+	ComboBox::ComboBox(int x, int y, int width, int height, unsigned long style /* = */ ):
+		Controller(Controller::COMBOBOX),
+		x(x), y(y), width(width), height(height), style(style),
+		OnListClose(nullptr), OnListOpen(nullptr), OnElementEdit(nullptr),
+		elementCount(0)
 	{
-		this->parent = parent;
 
-		this->handle = CreateWindowEx(NULL,
-			WC_COMBOBOX,
-			WIDEN(""),
-			this->styles,
+	}
+
+	void ComboBox::Create(Window* parent)
+	{
+		this->handle = CreateWindowEx(
+			0,
+			WIDEN("ComboBox"),
+			nullptr,
+			this->style,
 			this->x,
 			this->y,
 			this->width,
 			this->height,
-			this->parent,
+			parent->GetHandle(),
 			(HMENU)this->id,
-			(HINSTANCE)GetWindowLongPtr(this->parent, GWL_HINSTANCE),
-			NULL);
+			GetModuleHandle(0),
+			nullptr);
 
-		ShowWindow(this->handle, SW_SHOW);
+		if(!this->handle)
+			ERRORMB();
 	}
 
-	void ComboBox::Add(const tstring& txt)
+	void ComboBox::Add(const tstring& text)
 	{
-		ComboBox_AddString(this->handle, LPCTSTR(txt.c_str()));
-		this->items.emplace_back(txt);
-		
-		if(this->items.size() == 1)
-			ComboBox_SetCurSel(this->handle, 0);
+		SendMessage(this->handle, CB_ADDSTRING, 0, reinterpret_cast<LPARAM>(static_cast<LPCTSTR>(text.c_str())) );
+		this->elementCount++;
 	}
 
-	void ComboBox::Remove(const unsigned int index)
+	void ComboBox::Remove(unsigned int index)
 	{
-		ComboBox_DeleteString(this->handle, index);
+		if( SendMessage(this->handle, CB_DELETESTRING, index, 0) != CB_ERR)
+			this->elementCount--;
 	}
 
-	unsigned int ComboBox::SelectionIndex() const
+	unsigned int ComboBox::Count() const
 	{
-		return SendMessage(this->handle, CB_GETCURSEL, 0, 0);
+		return this->elementCount;
 	}
 
+	int ComboBox::SelectionIndex() const
+	{
+		return static_cast<int>(SendMessage(this->handle, CB_GETCURSEL, 0, 0) );
+	}
+
+	void ComboBox::Select(unsigned int index)
+	{
+		SendMessage(this->handle, CB_SETCURSEL, index, 0);
+	}
+
+	void ComboBox::MsgHandler(WPARAM wparam, LPARAM lparam)
+	{
+		switch (wparam)
+		{
+		case CBN_CLOSEUP:
+			{
+				if(this->OnListClose != nullptr)
+					this->OnListClose();
+			}break;
+
+		case CBN_DROPDOWN:
+			{
+				if(this->OnListOpen != nullptr)
+					this->OnListOpen();
+			}break;
+
+		case CBN_EDITCHANGE:
+			{
+				if(this->OnElementEdit != nullptr)
+					this->OnElementEdit();
+			}break;
+
+		case CBN_SETFOCUS:
+			{
+				if(this->OnFocus != nullptr)
+					this->OnFocus();
+			}break;
+
+		case CBN_KILLFOCUS:
+			{
+				if(this->OnFocusLost != nullptr)
+					this->OnFocusLost();
+			}break;
+
+		case CBN_SELCHANGE:
+			{
+				if(this->OnSelectionChanged != nullptr)
+					this->OnSelectionChanged();
+			}break;
+
+		case CBN_SELENDCANCEL:
+			{
+				if(this->OnSelectionCanceled != nullptr)
+					this->OnSelectionCanceled();
+			}break;
+
+
+		default:
+			break;
+		}
+	}
 }

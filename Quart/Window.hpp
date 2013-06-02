@@ -1,86 +1,64 @@
 # pragma once
 
-# ifdef ENABLE_COMMON_CONTROLS
-#	pragma comment(linker,"\"/manifestdependency:type='win32' \
-	name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
-	processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-# endif
-
-# ifdef _MSC_VER
-#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
-# endif
-
-# include <windows.h>
-# include <string>
-# include <functional>
-# include <unordered_map>
-# include <memory>
-
-# include "object.hpp"
+# include "Controller.hpp"
 # include "MenuBar.hpp"
 # include "Accelerator.hpp"
+
+# include <unordered_map>
+# include <memory>
+# include <vector>
 
 namespace Quart
 {
 	class Window
 	{
-		friend class MenuBar;
-
-        typedef std::unique_ptr<Object> ObjectPTR;
+		typedef std::unique_ptr<Controller> ControllerPTR;
 		typedef std::unique_ptr<MenuBar> MenuBarPTR;
 
-        std::unordered_map<int, ObjectPTR> objects;
-		std::unordered_map<int, Accelerator*> accelerators;
-
-		Window* parent;
-
-        HINSTANCE instance;
-		HACCEL accelTable;
-		ACCEL* accels;
-        HWND handle;
-        MSG msg;
-
-        tstring windowName;
-        tstring className;
+	private:
+		MSG msg;
+		HWND windowHandle;
+		HINSTANCE instance;
 
 		MenuBarPTR menuBar;
 
-		unsigned int width;
-		unsigned int height;
-		unsigned int objID;
+		Window* parent;
+
+		std::unordered_map<unsigned int, ControllerPTR> controllers;
+		std::vector<Accelerator*> accelerators;
+		unsigned int controllersID;
+
 	public:
-		std::map<unsigned int, std::function<void(WPARAM,LPARAM)> > callback;
+		std::function<void()> OnClose;
 
-
-		Window(unsigned int width,
-			   unsigned int height,
+		Window(unsigned int width, 
+			   unsigned int height, 
 			   const tstring& title,
-			   Window* parent = nullptr);
-		~Window();
+			   Window* parent           = nullptr,
+			   int x                    = CW_USEDEFAULT, 
+			   int y                    = CW_USEDEFAULT, 
+			   unsigned long style      = WS_OVERLAPPEDWINDOW, 
+			   unsigned long exStyle    = 0, 
+			   unsigned short cursor    = (unsigned short)(IDC_ARROW),
+			   unsigned short icon      = (unsigned short)(IDI_APPLICATION), 
+			   unsigned short smallIcon = (unsigned short)(IDI_APPLICATION),
+			   unsigned long classStyle = (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS)
+			   );
 
-        operator HWND();
+		int Run();
+		HWND GetHandle() const;
 
-        void Add(Object*);
 		void Add(MenuBar*);
 		void Add(Accelerator*);
-        
-		int Run();
+		void Add(Controller*);
 
-		void Close();
-		void Enable(bool = true);
+		void Enable();
 		void Disable();
+		void Focus();
+		void Close();
 
-		bool Create(unsigned long style      = WS_OVERLAPPEDWINDOW,
-					unsigned long EXstyle	 = NULL,
-					int cmdShow              = SW_SHOW,
-					int x                    = CW_USEDEFAULT,
-					int y                    = CW_USEDEFAULT,
-					unsigned short cursor    = (WORD)(IDC_ARROW),
-					unsigned short icon      = (WORD)(IDI_APPLICATION),
-					unsigned short iconSmall = (WORD)(IDI_APPLICATION));
-
-    private:
-        static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);
-        LRESULT WindowProc(HWND,UINT,WPARAM,LPARAM);
+	private:
+		static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);
+		LRESULT WindowProc(HWND,UINT,WPARAM,LPARAM);
 	};
 }

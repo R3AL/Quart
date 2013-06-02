@@ -1,4 +1,4 @@
-#include "OpenFileDialog.hpp"
+# include "OpenFileDialog.hpp"
 
 namespace Quart
 {
@@ -13,12 +13,11 @@ namespace Quart
 			leFilter[i++] = letter;
 
 		ofn.lStructSize    = sizeof(OPENFILENAME);
-		ofn.hwndOwner      = parent;
+		ofn.hwndOwner      = parent.GetHandle();
 		ofn.lpstrFilter    = leFilter;
 		ofn.lpstrFile      = FileName;
 		ofn.nMaxFile       = MAX_PATH;
 		ofn.Flags          = OFN_EXPLORER | OFN_FILEMUSTEXIST;
-		ofn.lpstrDefExt    = WIDEN("txt");
 		ofn.nFileOffset    = 0;
 		ofn.nFileExtension = 0;
 		ofn.nFilterIndex   = 0;

@@ -1,6 +1,7 @@
-#include <windows.h>
-#include "object.hpp"
-#include "window.hpp"
+# include <windows.h>
+
+# include "Controller.hpp"
+# include "Window.hpp"
 
 namespace Quart
 {

@@ -1,46 +1,57 @@
 # pragma once
 
-#include "object.hpp"
+# include "Controller.hpp"
 
-#include <windows.h>
-#include <vector>
-#include <memory>
+# include <vector>
+# include <functional>
 
 namespace Quart
 {
-	class SubmenuElement : public Object
+	class MenuSubElement : public Controller
 	{
 		friend class Window;
-		friend class MenuBar;
-		tstring text;
-	public:
-		SubmenuElement(const tstring&);
-		void Create(HWND&);
 
 	private:
-		void Draw(HWND&,HDC&,PAINTSTRUCT&);
+		tstring text;
+
+	public:
+		std::function<void()> OnClick;
+
+		MenuSubElement(const tstring&);
+
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 
-	class MenuElement
+	class MenuElement : public Controller
 	{
 		friend class Window;
-		friend class MenuBar;
-		std::vector<SubmenuElement*> subelements;
+
+	private:
+		std::vector<MenuSubElement*> subelements;
 		tstring text;
+
 	public:
-		MenuElement(const tstring&, unsigned int, ...);
+		std::function<void()> OnClick;
+		
+		MenuElement(const tstring& text);
+		MenuElement(const tstring& text, unsigned int subelementCount, ...);
+
+	private:
+		void Create(Window*);
+		void MsgHandler(WPARAM, LPARAM);
 	};
 
 	class MenuBar
 	{
 		friend class Window;
-		typedef std::unique_ptr<MenuElement> MenuElementPTR;
-		std::vector<MenuElementPTR> elements;
-		HMENU menu, submenu;
-		Window* parent;
+
+	private:
+		std::vector<MenuElement*> elements;
+
 	public:
-		void Set(HWND&);
-		MenuBar(Window*);
+		MenuBar();
 		void Add(MenuElement*);
 	};
 }

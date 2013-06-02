@@ -1,53 +1,54 @@
-#include "MenuBar.hpp"
-#include <cstdarg>
-# include "Window.hpp"
+# include "MenuBar.hpp"
 
 namespace Quart
 {
-	SubmenuElement::SubmenuElement(const tstring& txt):
-		Object(0, 0), text(txt) {}
+	MenuSubElement::MenuSubElement(const tstring& text): 
+		text(text),
+		OnClick(nullptr)
+	{}
 
-	void SubmenuElement::Create(HWND&) {}
-	void SubmenuElement::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
-
-	MenuElement::MenuElement(const tstring& txt, unsigned int count, ...)
+	void MenuSubElement::Create(Window*) {}
+	
+	void MenuSubElement::MsgHandler(WPARAM wparam, LPARAM)
 	{
-		this->text = txt;
+		if(wparam == 0 && this->OnClick != nullptr)
+			this->OnClick();
+	}
 
+	MenuElement::MenuElement(const tstring& text, unsigned int count, ...):
+		text(text),
+		OnClick(nullptr)
+	{
 		va_list list;
 		va_start(list, count);
 
 		for(unsigned int i = 0; i < count; ++i)
-		{
-			auto var = va_arg(list, SubmenuElement*);
-			this->subelements.emplace_back(var);
-		}
+			this->subelements.emplace_back(va_arg(list, MenuSubElement*));
 
 		va_end(list);
 	}
 
-	MenuBar::MenuBar(Window* parent) : parent(parent)
+	MenuElement::MenuElement(const tstring& text):
+		text(text),
+		OnClick(nullptr)
 	{
-		this->menu = CreateMenu();
+
 	}
 
-	void MenuBar::Set(HWND& hwnd)
+	void MenuElement::Create(Window*) {}
+
+	void MenuElement::MsgHandler(WPARAM wparam, LPARAM)
 	{
-		SetMenu(hwnd, this->menu);
+		if(wparam == 0 && this->OnClick != nullptr)
+			this->OnClick();
+	}
+
+	MenuBar::MenuBar()
+	{
 	}
 
 	void MenuBar::Add(MenuElement* elem)
 	{
-		this->submenu = CreatePopupMenu();
-
-		this->elements.emplace_back(MenuElementPTR(elem));
-
-		for(auto& subelem : elem->subelements)
-		{
-			subelem->id = this->parent->objID++;
-			AppendMenu(this->submenu, MF_STRING, subelem->id, subelem->text.c_str());
-		}
-
-		AppendMenu(this->menu, MF_STRING | MF_POPUP, (UINT)this->submenu, (LPTSTR)elem->text.c_str());
+		this->elements.emplace_back(elem);
 	}
 }

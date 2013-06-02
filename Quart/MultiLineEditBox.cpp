@@ -1,46 +1,45 @@
-#include "MultiLineEditBox.hpp"
+# include "MultilineEditBox.hpp"
+# include "Window.hpp"
 
 namespace Quart
 {
-	MultiLineEditBox::MultiLineEditBox( int x, 
-										int y, 
-										int width, 
-										int height, 
-										const tstring& text, 
-										unsigned long styles /* = */ ) : 
-	Object(x, y, width, height, styles), text(text) {}
-
-	void MultiLineEditBox::Draw(HWND&,HDC&,PAINTSTRUCT&) {}
-
-	void MultiLineEditBox::Create(HWND& parent)
+	MultilineEditBox::MultilineEditBox(int x, int y, int width, int height, const tstring& text, unsigned long style):
+		Controller(Controller::MLEDITBOX),
+		eb(x, y, width, height, text, (style | ES_MULTILINE) ),
+		OnTextChanged(eb.OnTextChanged), OnFocus(eb.OnFocus), OnFocusLost(eb.OnFocusLost), OnExceedingText(OnExceedingText)
 	{
-		this->parent = parent;
-		this->handle = CreateWindowEx(NULL,
-			WIDEN("EDIT"),
-			this->text.c_str(),
-			(this->styles | ES_MULTILINE),
-			this->x,
-			this->y,
-			this->width,
-			this->height,
-			this->parent,
-			(HMENU)this->id,
-			(HINSTANCE)GetWindowLongPtr(this->parent, GWL_HINSTANCE),
-			NULL);
-		ShowWindow(this->handle, SW_SHOW);
+
 	}
 
-	tstring MultiLineEditBox::GetText() const
+	void MultilineEditBox::Create(Window* parent)
 	{
-		int len = GetWindowTextLength(this->handle);
+		this->eb.id = this->id;
 
-		TCHAR* chr = new TCHAR[len + 1];
-		GetWindowText(this->handle, chr, len);
-
-		tstring tmp(chr);
-		delete chr;
-
-		return tmp;
+		this->eb.Create(parent);
 	}
 
+	tstring MultilineEditBox::GetText() const
+	{
+		return this->eb.GetText();
+	}
+
+	void MultilineEditBox::SetText(const tstring& text)
+	{
+		this->eb.SetText(text);
+	}
+
+	void MultilineEditBox::Clear()
+	{
+		this->eb.Clear();
+	}
+
+	void MultilineEditBox::LimitText(unsigned int limit)
+	{
+		this->eb.LimitText(limit);
+	}
+
+	void MultilineEditBox::MsgHandler(WPARAM wparam, LPARAM lparam)
+	{
+		this->eb.MsgHandler(wparam, lparam);
+	}
 }
