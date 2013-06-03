@@ -92,12 +92,6 @@ int main()
 	{
 		Window window2(400, 400, L"New Window");
 
-		// Force non-child window to close when main window is closed
-		window.OnClose = [&]()
-		{
-			window2.Close();
-		};
-
 		window2.Run();
 	};
 
