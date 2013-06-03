@@ -29,6 +29,7 @@ namespace Quart
 				 unsigned long style = (WS_CHILD	   |
 										WS_VISIBLE	   |
 										WS_OVERLAPPED  |
+										WS_TABSTOP	   |
 										CBS_HASSTRINGS |
 										CBS_DROPDOWN));
 

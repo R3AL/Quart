@@ -32,9 +32,10 @@ namespace Quart
 		void ScrollTo(unsigned int index);
 		void Select(unsigned int index);
 		void Unselect(unsigned int index = -1);
-		int Count() const;
 		void Clear();
 
+		int Count() const;
+		int SelectionIndex() const;
 	private:
 		void Create(Window*);
 		void MsgHandler(WPARAM, LPARAM);

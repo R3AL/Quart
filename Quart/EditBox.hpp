@@ -27,7 +27,7 @@ namespace Quart
 				int y,
 				int width,
 				int height,
-				const tstring& text,
+				const tstring& text = WIDEN(""),
 				unsigned long style = (WS_CHILD		  | 
 									   WS_VISIBLE	  | 
 									   WS_TABSTOP	  | 

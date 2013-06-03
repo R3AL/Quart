@@ -131,12 +131,26 @@ namespace Quart
 		va_end(list);
 	}
 
+	int ListView::SelectionIndex() const
+	{
+		int retval = -1;
+
+		auto end = this->Count();
+
+		for(auto i = 0; i < end; ++i)
+		{
+			if((static_cast<unsigned int>(SendMessage(this->handle, LVM_GETITEMSTATE, i, LVIS_SELECTED)) == LVIS_SELECTED))
+			{
+				retval = i;
+				break;
+			}
+		}
+
+		return retval;
+	}
+
 	void ListView::MsgHandler(WPARAM wparam, LPARAM lparam)
 	{
-// 		switch (wparam)
-// 		{
-// 		default:
-//			break;
-// 		}
+
 	}
 }
