@@ -23,6 +23,7 @@ namespace Quart
 		MenuBarPTR menuBar;
 
 		Window* parent;
+		enum Controller::type type;
 
 		std::unordered_map<unsigned int, ControllerPTR> controllers;
 		std::vector<Accelerator*> accelerators;

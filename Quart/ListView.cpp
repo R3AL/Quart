@@ -1,5 +1,6 @@
 # include "ListView.hpp"
 # include "Window.hpp"
+# include "Messagebox.hpp"
 
 # include <cstdarg>
 
@@ -30,7 +31,9 @@ namespace Quart
 			nullptr);
 
 		if(!this->handle)
+		{
 			ERRORMB();
+		}
 	}
 
 	void ListView::AddCollumn(const tstring& text, int index /* = -1 */, unsigned int width /* = 100 */)

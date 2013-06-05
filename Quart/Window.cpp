@@ -20,7 +20,8 @@ namespace Quart
 				   unsigned long classStyle) :
 		controllersID(1),
 		windowHandle(nullptr),
-		parent(parent)
+		parent(parent),
+		type(Controller::WINDOW)
 	{
 		srand(static_cast<unsigned int>(time(0)));
 

@@ -4,7 +4,28 @@
 # include <string>
 # include <sstream>
 
-# define ERRORMB() MessageBox(0, WIDEN("Invalid handle provided in '")  WIDEN(__FUNCTION__) WIDEN("' function"),NULL, NULL )
+//# define ERRORMB() MessageBox(0, WIDEN("Invalid handle provided in '")  WIDEN(__FUNCTION__) WIDEN("' function\n"),NULL, NULL )
+
+# define ERRORMB() \
+	{\
+	tstring objType; \
+	switch(this->type)\
+{\
+	case Controller::WINDOW: objType      = WIDEN("Window");           break;\
+	case Controller::BUTTON: objType      = WIDEN("Button");           break;\
+	case Controller::LABEL: objType       = WIDEN("Label");            break;\
+	case Controller::EDITBOX: objType     = WIDEN("Editbox");          break;\
+	case Controller::MLEDITBOX: objType   = WIDEN("MultilineEditbox"); break;\
+	case Controller::COMBOBOX: objType    = WIDEN("Combobox");         break;\
+	case Controller::LISTVIEW: objType    = WIDEN("Listview");         break;\
+	case Controller::ACCELERATOR: objType = WIDEN("Accelerator");      break;\
+	case Controller::PROGRESSBAR: objType = WIDEN("Progressbar");      break;\
+	case Controller::UPDOWN: objType      = WIDEN("Updown");           break;\
+}\
+	\
+	Messagebox(WIDEN("Function name: ") WIDEN(__FUNCTION__)\
+	WIDEN("\nObject type: ") + objType, WIDEN("Invalid handle provided !")); }
+
 
 # ifndef __VISUALSTYLE_CHECK
 #	define __VISUALSTYLE_CHECK false
@@ -51,6 +72,7 @@ namespace Quart
 		enum type
 		{
 			CONTROLLER = 0,
+			WINDOW,
 			BUTTON,
 			LABEL,
 			EDITBOX,
@@ -60,13 +82,10 @@ namespace Quart
 			ACCELERATOR,
 			PROGRESSBAR,
 			UPDOWN
-		};
+		}type;
 
 		HWND handle;
 		unsigned int id;
-
-	private:
-		type type;
 
 	public:
 		virtual ~Controller();

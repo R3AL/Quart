@@ -1,5 +1,6 @@
 # include "ProgressBar.hpp"
 # include "Window.hpp"
+# include "Messagebox.hpp"
 
 # include <CommCtrl.h>
 
