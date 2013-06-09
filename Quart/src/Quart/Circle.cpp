@@ -1,4 +1,5 @@
 # include "Circle.hpp"
+# include "Window.hpp"
 
 namespace Quart
 {
@@ -54,5 +55,24 @@ namespace Quart
 	void Circle::SetPenStyle(PenStyle style)
 	{
 		this->penStyle = style;
+	}
+
+	std::pair<int, int> Circle::GetPosition() const
+	{
+		return std::make_pair(this->x, this->y);
+	}
+
+	void Circle::SetPosition(const std::pair<int,int>& position, bool forceRedraw)
+	{
+		this->SetPosition(position.first, position.second, forceRedraw);
+	}
+
+	void Circle::SetPosition(int x, int y, bool forceRedraw)
+	{
+		this->x = x;
+		this->y = y;
+
+		if(forceRedraw)
+			this->parent->Redraw();
 	}
 }

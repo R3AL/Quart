@@ -52,4 +52,22 @@ namespace Quart
 			break;
 		}
 	}
+
+	tstring Label::GetText() const
+	{
+		auto len = GetWindowTextLength(this->handle) + 1;
+
+		auto chr = new TCHAR[len];
+		GetWindowText(this->handle, chr, len);
+
+		tstring tmp(chr);
+		delete chr;
+
+		return tmp;
+	}
+
+	void Label::SetText(const tstring& text)
+	{
+		SetWindowText(this->handle, static_cast<LPCTSTR>(text.c_str()) );
+	}
 }

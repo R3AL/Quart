@@ -22,7 +22,8 @@ namespace Quart
 		windowHandle(nullptr),
 		parent(parent),
 		type(Controller::WINDOW),
-		OnClose(nullptr), OnLClick(nullptr), OnRClick(nullptr)
+		OnClose(nullptr), OnLBtnDown(nullptr), OnLBtnUp(nullptr), 
+		OnRBtnDown(nullptr), OnRBtnUp(nullptr)
 	{
 		srand(static_cast<unsigned int>(time(0)));
 
@@ -104,7 +105,6 @@ namespace Quart
 					}
 
 				EndPaint(hwnd, &ps);
-//				ReleaseDC(hwnd, hdc);
 			}break;
 
 		case WM_DESTROY:
@@ -167,19 +167,46 @@ namespace Quart
 
 		case WM_LBUTTONDOWN:
 			{
-				if(this->OnLClick != nullptr)
+				if(this->OnLBtnDown != nullptr)
 				{
 					POINTS mpos = MAKEPOINTS(lparam);
-					this->OnLClick(mpos.x, mpos.y);
+					this->OnLBtnDown(mpos.x, mpos.y);
 				}
 			}break;
 
 		case WM_RBUTTONDOWN:
 			{
-				if(this->OnRClick != nullptr)
+				if(this->OnRBtnDown != nullptr)
 				{
 					POINTS mpos = MAKEPOINTS(lparam);
-					this->OnRClick(mpos.x, mpos.y);
+					this->OnRBtnDown(mpos.x, mpos.y);
+				}
+			}break;
+
+		case WM_LBUTTONUP:
+			{
+				if(this->OnLBtnUp != nullptr)
+				{
+					POINTS mpos = MAKEPOINTS(lparam);
+					this->OnLBtnUp(mpos.x, mpos.y);
+				}
+			}break;
+
+		case WM_RBUTTONUP:
+			{
+				if(this->OnRBtnUp != nullptr)
+				{
+					POINTS mpos = MAKEPOINTS(lparam);
+					this->OnRBtnUp(mpos.x, mpos.y);
+				}
+			}break;
+
+		case WM_MOUSEMOVE:
+			{
+				if(this->OnMouseMove != nullptr)
+				{
+					POINTS mpos = MAKEPOINTS(lparam);
+					this->OnMouseMove(mpos.x, mpos.y);
 				}
 			}break;
 
@@ -243,6 +270,11 @@ namespace Quart
 		}
 
 		return static_cast<int>(msg.wParam);
+	}
+
+	int Window::operator()()
+	{
+		return this->Run();
 	}
 
 	void Window::Add(Controller* obj)
