@@ -9,7 +9,7 @@ namespace Quart
 	
 	private:
 		int x, y;
-		unsigned int radius;
+		unsigned int diameter;
 		unsigned long fillColor;
 		unsigned long strokeColor;
 		int strokeWidth;
@@ -18,7 +18,7 @@ namespace Quart
 	public:
 		Circle(int x,
 			   int y,
-			   unsigned int radius,
+			   unsigned int diameter,
 			   unsigned long fillColor   = 0,
 			   unsigned long strokeColor = 0,
 			   int strokeWidth           = 0);
@@ -29,6 +29,9 @@ namespace Quart
 		std::pair<int, int> GetPosition() const;
 		void SetPosition(const std::pair<int,int>& position, bool forceRedraw = true);
 		void SetPosition(int x, int y, bool forceRedraw = true);
+
+		unsigned int GetDiameter() const;
+		void SetDiameter(unsigned int diameter, bool forceRedraw = true);
 
 	private:
 		void Draw(HDC&, PAINTSTRUCT&);

@@ -3,8 +3,8 @@
 
 namespace Quart
 {
-	Circle::Circle(int x, int y, unsigned int radius, unsigned long fillColor, unsigned long strokeColor, int strokeWidth):
-		x(x), y(y), radius(radius), fillColor(fillColor), strokeColor(strokeColor), strokeWidth(strokeWidth),
+	Circle::Circle(int x, int y, unsigned int diameter, unsigned long fillColor, unsigned long strokeColor, int strokeWidth):
+		x(x), y(y), diameter(diameter), fillColor(fillColor), strokeColor(strokeColor), strokeWidth(strokeWidth),
 		penStyle(PenStyle::SOLID)
 	{
 
@@ -31,7 +31,7 @@ namespace Quart
 		if(pen != nullptr)
 			oldPen = (HPEN)SelectObject(hdc, pen);
 
-		Ellipse(hdc, x, y, x + radius, y + radius);
+		Ellipse(hdc, x, y, x + diameter, y + diameter);
 
 		if(brush != nullptr)
 		{
@@ -71,6 +71,19 @@ namespace Quart
 	{
 		this->x = x;
 		this->y = y;
+
+		if(forceRedraw)
+			this->parent->Redraw();
+	}
+
+	unsigned int Circle::GetDiameter() const
+	{
+		return this->diameter;
+	}
+
+	void Circle::SetDiameter(unsigned int diameter, bool forceRedraw /* = true */)
+	{
+		this->diameter = diameter;
 
 		if(forceRedraw)
 			this->parent->Redraw();
