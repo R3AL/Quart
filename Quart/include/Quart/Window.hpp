@@ -34,8 +34,11 @@ namespace Quart
 
 	public:
 		std::function<void()> OnClose;
-		std::function<void(int,int)> OnLClick;
-		std::function<void(int,int)> OnRClick;
+		std::function<void(int,int)> OnLBtnDown,
+			OnLBtnUp,
+			OnRBtnDown,
+			OnRBtnUp,
+			OnMouseMove;
 
 		Window(unsigned int width, 
 			   unsigned int height, 
@@ -52,6 +55,8 @@ namespace Quart
 			   );
 
 		int Run();
+		int operator()();
+
 		HWND GetHandle() const;
 
 		void Add(MenuBar*);

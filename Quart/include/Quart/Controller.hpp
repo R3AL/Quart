@@ -36,13 +36,15 @@
 #	define WIDEN2(x) L ## x 
 #	define WIDEN(x) WIDEN2(x)
 
-#   ifdef _MSC_VER
-#		ifdef _DEBUG
-#			pragma comment(lib, "Quart/Quart-unicode-debug.lib")
-#		else
-#			pragma comment(lib, "Quart/Quart-unicode-release.lib")
+#	ifndef _QUART_TESTING
+#		ifdef _MSC_VER
+#			ifdef _DEBUG
+#				pragma comment(lib, "Quart/Quart-Unicode-Debug.lib")
+#			else
+#				pragma comment(lib, "Quart/Quart-Unicode-Release.lib")
+#			endif
 #		endif
-#   endif
+#	endif
 
 # else
 	typedef std::string tstring;
@@ -50,14 +52,15 @@
 #	define to_tstring(a) std::to_string(a)
 #	define WIDEN(x) x
 
-#   ifdef _MSC_VER
-#		ifdef _DEBUG
-#			pragma comment(lib, "Quart/Quart-ansi-debug.lib")
-#		else
-#			pragma comment(lib, "Quart/Quart-ansi-release.lib")
+#	ifndef _QUART_TESTING
+#		ifdef _MSC_VER
+#			ifdef _DEBUG
+#				pragma comment(lib, "Quart/Quart-NotSet-Debug.lib")
+#			else
+#				pragma comment(lib, "Quart/Quart-NotSet-Release.lib")
+#			endif
 #		endif
-#   endif
-
+#	endif
 # endif
 
 # ifdef _MSC_VER
@@ -65,12 +68,14 @@
 # endif
 
 # ifndef DISABLE_VS_CC
-#	pragma comment(lib, "comctl32.lib")
-#	pragma comment(linker,"\"/manifestdependency:type='win32' \
-	name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
-	processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-# undef __VISUALSTYLE_CHECK
-# define __VISUALSTYLE_CHECK false
+#	ifdef _MSC_VER
+#		pragma comment(lib, "comctl32.lib")
+#		pragma comment(linker,"\"/manifestdependency:type='win32' \
+		name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+		processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#	endif
+#	undef __VISUALSTYLE_CHECK
+#	define __VISUALSTYLE_CHECK false
 # endif
 
 namespace Quart

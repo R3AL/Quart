@@ -24,6 +24,9 @@ namespace Quart
 			  const tstring& text,
 			  unsigned long style = (WS_CHILD | WS_VISIBLE | SS_NOTIFY) );
 
+		tstring GetText() const;
+		void SetText(const tstring& text);
+
 	private:
 		void Create(Window*);
 		void MsgHandler(WPARAM, LPARAM);

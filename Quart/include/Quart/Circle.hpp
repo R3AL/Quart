@@ -26,6 +26,10 @@ namespace Quart
 		PenStyle GetPenStyle() const;
 		void SetPenStyle(PenStyle style);
 
+		std::pair<int, int> GetPosition() const;
+		void SetPosition(const std::pair<int,int>& position, bool forceRedraw = true);
+		void SetPosition(int x, int y, bool forceRedraw = true);
+
 	private:
 		void Draw(HDC&, PAINTSTRUCT&);
 	};
