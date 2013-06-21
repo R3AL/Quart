@@ -7,8 +7,8 @@
 namespace Quart
 {
 	ListView::ListView(int x, int y, int width, int height, unsigned long style /* = */ ):
-		Controller(Controller::LISTVIEW),
-		x(x), y(y), width(width), height(height), style(style),
+		Controller(x, y, Controller::LISTVIEW),
+		width(width), height(height), style(style),
 		collumnsNumber(0)
 	{
 

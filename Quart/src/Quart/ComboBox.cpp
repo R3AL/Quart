@@ -7,9 +7,8 @@
 namespace Quart
 {
 	ComboBox::ComboBox(int x, int y, int width, int height, unsigned long style /* = */ ):
-		Controller(Controller::COMBOBOX),
-		x(x), y(y), width(width), height(height), style(style),
-		OnListClose(nullptr), OnListOpen(nullptr), OnElementEdit(nullptr),
+		Controller(x, y, Controller::COMBOBOX),
+		width(width), height(height), style(style),
 		elementCount(0)
 	{
 

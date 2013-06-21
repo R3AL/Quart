@@ -5,9 +5,8 @@
 namespace Quart
 {
 	Button::Button(int x, int y, int width, int height, const tstring& text, unsigned long style /* = */ ):
-		Controller(Controller::BUTTON),
-		x(x), y(y), width(width), height(height), text(text), style(style), 
-		OnClick(nullptr), OnDbClick(nullptr), OnFocus(nullptr), OnFocusLost(nullptr)
+		Controller(x, y, Controller::BUTTON),
+		width(width), height(height), text(text), style(style)
 	{
 
 	}

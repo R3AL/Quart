@@ -3,11 +3,24 @@
 
 namespace Quart
 {
-	Controller::Controller(enum type type) :
+	Controller::Controller(enum type type):
 		id(0),
 		handle(nullptr),
 		type(type)
-	{}
+	{
+
+	}
+
+	Controller::Controller(int x, int y, enum type type) :
+		x(x),
+		y(y),
+		id(0),
+		handle(nullptr),
+		type(type)
+
+	{
+
+	}
 
 	Controller::~Controller() {}
 
@@ -34,4 +47,21 @@ namespace Quart
 			ERRORMB();
 	}
 
+	std::pair<int, int> Controller::GetPosition() const
+	{
+		return std::make_pair(this->x, this->y);
+	}
+
+	void Controller::SetPosition(const std::pair<int,int>& position)
+	{
+		this->SetPosition(position.first, position.second);
+	}
+
+	void Controller::SetPosition(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+
+		SetWindowPos(this->handle, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
 }

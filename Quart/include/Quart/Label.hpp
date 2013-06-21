@@ -9,7 +9,7 @@ namespace Quart
 	class Label : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		tstring text;
 		unsigned long style;
 

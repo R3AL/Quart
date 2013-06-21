@@ -7,8 +7,8 @@
 namespace Quart
 {
 	ProgressBar::ProgressBar(int x, int y, int width, int height, unsigned int minVal, unsigned int maxVal, unsigned int stepSize, unsigned long style /* = */ ):
-		Controller(Controller::PROGRESSBAR),
-		x(x), y(y), width(width), height(height), style(style), range(minVal,maxVal), stepSize(stepSize)
+		Controller(x, y, Controller::PROGRESSBAR),
+		width(width), height(height), style(style), range(minVal,maxVal), stepSize(stepSize)
 	{
 
 	}
@@ -45,6 +45,9 @@ namespace Quart
 			SendMessage(this->handle, PBM_STEPIT, 0, 0);
 		else
 			SendMessage(this->handle, PBM_DELTAPOS, size, 0);
+
+		if(this->GetStep() >= this->range.second && this->OnMaxVal != nullptr)
+			this->OnMaxVal();
 	}
 
 	unsigned int ProgressBar::GetStep() const
@@ -55,6 +58,9 @@ namespace Quart
 	void ProgressBar::SetStep(int step)
 	{
 		SendMessage(this->handle, PBM_SETSTEP, step, 0);
+
+		if(this->GetStep() >= this->range.second && this->OnMaxVal != nullptr)
+			this->OnMaxVal();
 	}
 
 	void ProgressBar::SetStepSize(unsigned int stepSize)

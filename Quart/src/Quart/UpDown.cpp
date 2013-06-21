@@ -5,11 +5,11 @@
 namespace Quart
 {
 	UpDown::UpDown(int x, int y, int width, int height, int minval, int maxval, unsigned long style /* = */ ):
-		Controller(Controller::UPDOWN),
-		x(x), y(y), width(width), height(height), style(style),
+		Controller(x, y, Controller::UPDOWN),
+		width(width), height(height), style(style),
 		range(minval, maxval), readyForChange(false),
 		buddy(new EditBox(x, y, width, height, to_tstring(minval), WS_CHILD | WS_VISIBLE | WS_BORDER | ES_NUMBER | ES_LEFT)),
-		OnValueChanged(nullptr), OnFocus(buddy->OnFocus), OnFocusLost(buddy->OnFocusLost)
+		OnFocus(buddy->OnFocus), OnFocusLost(buddy->OnFocusLost)
 	{
 
 	}

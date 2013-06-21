@@ -10,7 +10,7 @@ namespace Quart
 	class ListView : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		unsigned long style;
 		unsigned int collumnsNumber;
 

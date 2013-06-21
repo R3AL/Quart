@@ -1,8 +1,5 @@
-// Enable common controls and visual styles
-# define ENABLE_CC_VS
-
-# include <Quart/Controller.hpp>
 # include <Quart/Window.hpp>
+# include <Quart/Controller.hpp>
 # include <Quart/Button.hpp>
 # include <Quart/Label.hpp>
 # include <Quart/EditBox.hpp>
@@ -21,7 +18,7 @@ int main()
 {
 	using namespace Quart;
 
-	Window window(600, 250, L"Window title");
+	Window window(600, 250, L"Window title", Gdi::Colors::WHITE);
 
 	// [ ] Creating a menu
 	auto menuBar  = new MenuBar();
@@ -90,21 +87,21 @@ int main()
 
 	button2->OnClick = [&]()
 	{
-		Window window2(400, 400, L"New Window");
+		Window window2(400, 400, L"New Window", Gdi::Colors::WHITE);
 
 		window2.Run();
 	};
 
 	button3->OnClick = [&]()
 	{
-		Window window3(400, 400, L"New child Window", &window);
+		Window window3(400, 400, L"New child Window", Gdi::Colors::WHITE, &window);
 
 		window3.Run();
 	};
 
 	button4->OnClick = [&]()
 	{
-		Window wnd(470, 480, L"Controls examples", &window);
+		Window wnd(470, 480, L"Controls examples", Gdi::Colors::WHITE, &window);
 
 		auto labelEx        = new Label(10,  10, 100, 20,  L"This is a label !");
 		auto editboxEx      = new EditBox(120, 10, 150, 20,  L"This is an EditBox !");
@@ -127,19 +124,19 @@ int main()
 
 		// [ ] Operations on controls must be performed after calling Window.Add(control)
 		{
-		comboboxEx->Add(L"Item 1");
-		comboboxEx->Add(L"Item 2");
-		comboboxEx->Add(L"Item 3");
+			comboboxEx->Add(L"Item 1");
+			comboboxEx->Add(L"Item 2");
+			comboboxEx->Add(L"Item 3");
 
-		listviewEx->AddCollumn(L"Collumn 1");
-		listviewEx->AddCollumn(L"Collumn 2");
-		listviewEx->AddCollumn(L"Collumn 3");
-		listviewEx->AddCollumn(L"Collumn 4");
+			listviewEx->AddCollumn(L"Collumn 1");
+			listviewEx->AddCollumn(L"Collumn 2");
+			listviewEx->AddCollumn(L"Collumn 3");
+			listviewEx->AddCollumn(L"Collumn 4");
 
-		listviewEx->AddItem(0, L"Item 0, C1", L"Item 0, C2", L"Item 0, C3", L"Item0, C4");
-		listviewEx->AddItem(1, L"Item 1, C1", L"Item 1, C2", L"Item 1, C3", L"Item1, C4");
-		listviewEx->AddItem(2, L"Item 2, C1", L"Item 2, C2", L"Item 2, C3", L"Item2, C4");
-		listviewEx->AddItem(3, L"Item 3, C1", L"Item 3, C2", L"Item 3, C3", L"Item3, C4");
+			listviewEx->AddItem(0, L"Item 0, C1", L"Item 0, C2", L"Item 0, C3", L"Item0, C4");
+			listviewEx->AddItem(1, L"Item 1, C1", L"Item 1, C2", L"Item 1, C3", L"Item1, C4");
+			listviewEx->AddItem(2, L"Item 2, C1", L"Item 2, C2", L"Item 2, C3", L"Item2, C4");
+			listviewEx->AddItem(3, L"Item 3, C1", L"Item 3, C2", L"Item 3, C3", L"Item3, C4");
 		}
 		// [/]
 

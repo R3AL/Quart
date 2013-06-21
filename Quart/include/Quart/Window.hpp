@@ -1,7 +1,7 @@
 # pragma once
 
 # include "Controller.hpp"
-# include "Drawable.hpp"
+# include "Gdi\Drawable.hpp"
 # include "MenuBar.hpp"
 # include "Accelerator.hpp"
 
@@ -15,7 +15,7 @@ namespace Quart
 	{
 		typedef std::unique_ptr<Controller> ControllerPTR;
 		typedef std::unique_ptr<MenuBar> MenuBarPTR;
-		typedef std::unique_ptr<Drawable> DrawablePTR;
+		typedef std::unique_ptr<Gdi::Drawable> DrawablePTR;
 
 	private:
 		MSG msg;
@@ -32,6 +32,8 @@ namespace Quart
 		std::vector<Accelerator*> accelerators;
 		std::vector<DrawablePTR> drawables;
 
+		HBRUSH bgColor;
+
 	public:
 		std::function<void()> OnClose;
 		std::function<void(int,int)> OnLBtnDown,
@@ -43,6 +45,7 @@ namespace Quart
 		Window(unsigned int width, 
 			   unsigned int height, 
 			   const tstring& title,
+			   unsigned long backgroundColor,
 			   Window* parent           = nullptr,
 			   int x                    = CW_USEDEFAULT, 
 			   int y                    = CW_USEDEFAULT, 
@@ -54,6 +57,8 @@ namespace Quart
 			   unsigned long classStyle = (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS)
 			   );
 
+		~Window();
+
 		int Run();
 		int operator()();
 
@@ -63,13 +68,16 @@ namespace Quart
 		void Add(Accelerator*);
 		void Add(Controller*);
 
-		void Draw(Drawable*, bool forceRedraw = true);
+		void Draw(Gdi::Drawable*, bool forceRedraw = true);
 
 		void Enable();
 		void Disable();
 		void Focus();
 		void Close();
 		void Redraw();
+		std::pair<int,int> GetPosition() const;
+		void SetPosition(const std::pair<int, int>& position);
+		void SetPosition(int x, int y);
 
 	private:
 		static LRESULT __stdcall _wndproc(HWND,UINT,WPARAM,LPARAM);

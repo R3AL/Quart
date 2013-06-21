@@ -5,9 +5,8 @@
 namespace Quart
 {
 	EditBox::EditBox(int x, int y, int width, int height, const tstring& text, unsigned long style /* = */ ):
-		Controller(Controller::EDITBOX),
-		x(x), y(y), width(width), height(height), text(text), style(style), IgnoreTextChange(true),
-		OnTextChanged(nullptr), OnFocus(nullptr), OnFocusLost(nullptr), OnExceedingText(nullptr)
+		Controller(x, y, Controller::EDITBOX),
+		width(width), height(height), text(text), style(style), IgnoreTextChange(true)
 	{
 
 	}

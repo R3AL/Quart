@@ -1,17 +1,19 @@
 # include "Window.hpp"
+# include "Messagebox.hpp"
 
 # include <time.h>
 # include <CommCtrl.h>
-# include "Messagebox.hpp"
+# include <thread>
 
 namespace Quart
 {
 	Window::Window(unsigned int width, 
 				   unsigned int height, 
 				   const tstring& title, 
+				   unsigned long backgroundColor,
 				   Window* parent,
 				   int x, 
-				   int y, 
+				   int y,
 				   unsigned long style, 
 				   unsigned long exStyle, 
 				   unsigned short cursor,
@@ -21,45 +23,58 @@ namespace Quart
 		controllersID(1),
 		windowHandle(nullptr),
 		parent(parent),
-		type(Controller::WINDOW),
-		OnClose(nullptr), OnLBtnDown(nullptr), OnLBtnUp(nullptr), 
-		OnRBtnDown(nullptr), OnRBtnUp(nullptr)
+		type(Controller::WINDOW)
 	{
 		srand(static_cast<unsigned int>(time(0)));
+		bool succeeded = false;
 
-		tstring className(WIDEN(__TIME__) WIDEN(" ") + to_tstring(rand()) + to_tstring(rand()) + to_tstring(rand()));
+		tstring className;
 
-		this->instance = GetModuleHandle(0);
-
-		WNDCLASSEX windowClass    = {0};
-
-		windowClass.cbSize        = sizeof(WNDCLASSEX);
-		windowClass.lpszClassName = className.c_str();
-		windowClass.hInstance     = this->instance;
-		windowClass.hIcon         = LoadIcon(nullptr, MAKEINTRESOURCE(icon));
-		windowClass.hIconSm       = LoadIcon(nullptr, MAKEINTRESOURCE(smallIcon));
-		windowClass.hCursor       = LoadCursor(nullptr, MAKEINTRESOURCE(cursor));
-		windowClass.lpfnWndProc   = Window::_wndproc;
-
-		if(this->parent == nullptr)
+		for(int i = 0; i < 10; ++i)
 		{
-			windowClass.style         = classStyle;
-			windowClass.cbClsExtra    = 0;
-			windowClass.cbWndExtra    = 0;
-			windowClass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-			windowClass.lpszMenuName  = nullptr;
+			className = tstring(WIDEN(__TIME__) WIDEN(" ") + to_tstring(rand()) + to_tstring(rand()) + to_tstring(rand()) + to_tstring(std::this_thread::get_id().hash()));
+
+			this->instance = GetModuleHandle(0);
+
+			WNDCLASSEX windowClass    = {0};
+
+			windowClass.cbSize        = sizeof(WNDCLASSEX);
+			windowClass.lpszClassName = className.c_str();
+			windowClass.hInstance     = this->instance;
+			windowClass.hIcon         = LoadIcon(nullptr, MAKEINTRESOURCE(icon));
+			windowClass.hIconSm       = LoadIcon(nullptr, MAKEINTRESOURCE(smallIcon));
+			windowClass.hCursor       = LoadCursor(nullptr, MAKEINTRESOURCE(cursor));
+			windowClass.lpfnWndProc   = Window::_wndproc;
+
+			if(this->parent == nullptr)
+			{
+				this->bgColor             = CreateSolidBrush(backgroundColor);
+				windowClass.style         = classStyle;
+				windowClass.cbClsExtra    = 0;
+				windowClass.cbWndExtra    = 0;
+				windowClass.hbrBackground = this->bgColor;
+				windowClass.lpszMenuName  = nullptr;
+			}
+			else
+			{
+				windowClass.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
+
+				if(!exStyle)
+					exStyle = WS_EX_DLGMODALFRAME;
+
+				this->parent->Disable();
+			}
+
+			if(!RegisterClassEx(&windowClass))
+				continue;
+			else
+			{
+				succeeded = true;
+				break;
+			}
 		}
-		else
-		{
-			windowClass.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
 
-			if(!exStyle)
-				exStyle = WS_EX_DLGMODALFRAME;
-
-			this->parent->Disable();
-		}
-
-		if(!RegisterClassEx(&windowClass))
+		if(!succeeded)
 		{
 			MessageBox(nullptr, WIDEN("Failed registering window class"), NULL, NULL);
 			return;
@@ -322,7 +337,7 @@ namespace Quart
 		this->controllers[accel->id] = ControllerPTR(accel);
 	}
 
-	void Window::Draw(Drawable* obj, bool forceRedraw)
+	void Window::Draw(Gdi::Drawable* obj, bool forceRedraw)
 	{
 		obj->parent = this;
 		this->drawables.emplace_back(DrawablePTR(obj));
@@ -372,5 +387,28 @@ namespace Quart
 	void Window::Redraw()
 	{
 		InvalidateRect(this->windowHandle, nullptr, true);
+	}
+
+	std::pair<int, int> Window::GetPosition() const
+	{
+		RECT pos = {0};
+		GetWindowRect(this->GetHandle(), &pos);
+
+		return std::make_pair(pos.left, pos.top);
+	}
+
+	void Window::SetPosition(const std::pair<int, int>& position)
+	{
+		SetWindowPos(this->GetHandle(), nullptr, position.first, position.second, 0, 0, SWP_NOSIZE);
+	}
+
+	void Window::SetPosition(int x, int y)
+	{
+		this->SetPosition(std::make_pair(x, y));
+	}
+
+	Window::~Window()
+	{
+		DeleteObject(this->bgColor);
 	}
 }

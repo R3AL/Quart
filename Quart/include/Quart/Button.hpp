@@ -11,7 +11,7 @@ namespace Quart
 		friend class UpDown;
 
 	private:
-		int x, y, width, height;
+		int width, height;
 		tstring text;
 		unsigned long style;
 

@@ -11,12 +11,14 @@ namespace Quart
 	class ProgressBar : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		unsigned long style;
 		std::pair<unsigned int, unsigned int> range;
 		unsigned int stepSize;
 
 	public:
+		std::function<void()> OnMaxVal;
+
 		ProgressBar(int x,
 					int y,
 					int width,

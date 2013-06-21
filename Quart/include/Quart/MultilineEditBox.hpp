@@ -32,6 +32,10 @@ namespace Quart
 		void Clear();
 		void LimitText(unsigned int);
 
+		std::pair<int, int> GetPosition() const;
+		void SetPosition(const std::pair<int,int>& position);
+		void SetPosition(int x, int y);
+
 	private:
 		void Create(Window*);
 		void MsgHandler(WPARAM, LPARAM);

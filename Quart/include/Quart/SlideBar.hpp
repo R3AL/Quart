@@ -11,7 +11,7 @@ namespace Quart
 	class SlideBar : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		unsigned long style;
 
 	public:
@@ -22,7 +22,6 @@ namespace Quart
 			OnLineUp,
 			OnPageDown,
 			OnPageUp,
-/*			OnNewPosition,*/
 			OnChange;
 
 		SlideBar(int x,

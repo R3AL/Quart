@@ -5,9 +5,8 @@
 namespace Quart
 {
 	Label::Label(int x, int y, int width, int height, const tstring& text, unsigned long style /* = */ ):
-		Controller(Controller::LABEL),
-		x(x), y(y), width(width), height(height), text(text), style(style), 
-		OnClick(nullptr), OnDbClick(nullptr)
+		Controller(x, y, Controller::LABEL),
+		width(width), height(height), text(text), style(style)
 	{
 
 	}

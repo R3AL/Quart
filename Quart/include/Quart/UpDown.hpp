@@ -11,7 +11,7 @@ namespace Quart
 	class UpDown : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		unsigned long style;
 		std::pair<int, int> range;
 

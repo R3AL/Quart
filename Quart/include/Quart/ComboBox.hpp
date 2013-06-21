@@ -9,7 +9,7 @@ namespace Quart
 	class ComboBox : public Controller
 	{
 	private:
-		int x, y, width, height;
+		int width, height;
 		unsigned long style;
 		unsigned int elementCount;
 

@@ -6,10 +6,8 @@
 namespace Quart
 {
 	SlideBar::SlideBar(int x, int y, int width, int height, unsigned long style /* = */ ):
-		Controller(Controller::SLIDEBAR),
-		x(x), y(y), width(width), height(height), style(style),
-		OnEndKey(nullptr), OnHomeKey(nullptr), OnLineDown(nullptr), OnLineUp(nullptr),
-		OnPageDown(nullptr), OnPageUp(nullptr), /*OnNewPosition(nullptr),*/ OnChange(nullptr), OnKeyUp(nullptr)
+		Controller(x, y, Controller::SLIDEBAR),
+		width(width), height(height), style(style)
 	{
 
 	}
@@ -32,11 +30,6 @@ namespace Quart
 
 		if(!this->handle)
 			ERRORMB();
-
-//  		SendMessage(this->handle, TBM_SETRANGE, true, (LPARAM)MAKELONG(0, 100));
-//  		SendMessage(this->handle, TBM_SETPAGESIZE, 0, 4);
-// // 		SendMessage(this->handle, TBM_SETSEL, false, (LPARAM)MAKELONG(0, 100));
-//  		SendMessage(this->handle, TBM_SETPOS, true, 50);
 
 	}
 
@@ -122,12 +115,6 @@ namespace Quart
 				if(this->OnPageUp != nullptr)
 					this->OnPageUp();
 			}break;
-
-// 		case TB_THUMBPOSITION:
-// 			{
-// 				if(this->OnNewPosition != nullptr)
-// 					this->OnNewPosition();
-// 			}break;
 
 		case TB_THUMBTRACK:
 			{

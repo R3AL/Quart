@@ -4,8 +4,7 @@
 namespace Quart
 {
 	Accelerator::Accelerator(const Modifiers& modifierKeys, const Keys& Key):
-		Controller(Controller::ACCELERATOR),
-		OnFire(nullptr)
+		Controller(Controller::ACCELERATOR)
 	{
 		this->accel.fVirt = static_cast<unsigned char>(modifierKeys) | FNOINVERT | FVIRTKEY;
 		this->accel.key   = static_cast<unsigned short>(Key);

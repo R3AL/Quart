@@ -19,6 +19,7 @@
 	case Controller::ACCELERATOR: objType = WIDEN("Accelerator");      break;\
 	case Controller::PROGRESSBAR: objType = WIDEN("Progressbar");      break;\
 	case Controller::UPDOWN: objType      = WIDEN("Updown");           break;\
+	case Controller::CHECKBOX: objType	  = WIDEN("Checkbox");		   break;\
 }\
 	\
 	Messagebox(WIDEN("Function name: ") WIDEN(__FUNCTION__)\
@@ -36,13 +37,11 @@
 #	define WIDEN2(x) L ## x 
 #	define WIDEN(x) WIDEN2(x)
 
-#	ifndef _QUART_TESTING
-#		ifdef _MSC_VER
-#			ifdef _DEBUG
-#				pragma comment(lib, "Quart/Quart-Unicode-Debug.lib")
-#			else
-#				pragma comment(lib, "Quart/Quart-Unicode-Release.lib")
-#			endif
+#	ifdef _MSC_VER
+#		ifdef _DEBUG
+#			pragma comment(lib, "Quart/Quart-Unicode-Debug.lib")
+#		else
+#			pragma comment(lib, "Quart/Quart-Unicode-Release.lib")
 #		endif
 #	endif
 
@@ -52,13 +51,11 @@
 #	define to_tstring(a) std::to_string(a)
 #	define WIDEN(x) x
 
-#	ifndef _QUART_TESTING
-#		ifdef _MSC_VER
-#			ifdef _DEBUG
-#				pragma comment(lib, "Quart/Quart-NotSet-Debug.lib")
-#			else
-#				pragma comment(lib, "Quart/Quart-NotSet-Release.lib")
-#			endif
+#	ifdef _MSC_VER
+#		ifdef _DEBUG
+#			pragma comment(lib, "Quart/Quart-NotSet-Debug.lib")
+#		else
+#			pragma comment(lib, "Quart/Quart-NotSet-Release.lib")
 #		endif
 #	endif
 # endif
@@ -106,9 +103,12 @@ namespace Quart
 			ACCELERATOR,
 			PROGRESSBAR,
 			UPDOWN,
-			SLIDEBAR
+			SLIDEBAR,
+			CHECKBOX,
+			BMP
 		}type;
 
+		int x, y;
 		HWND handle;
 		unsigned int id;
 
@@ -116,10 +116,16 @@ namespace Quart
 		virtual ~Controller();
 
 		Controller(enum type = CONTROLLER);
+		Controller(int x, int y, enum type = CONTROLLER);
 
 		void Enable();
 		void Disable();
 		void Focus();
+
+		virtual std::pair<int, int> GetPosition() const;
+
+		virtual void SetPosition(const std::pair<int,int>& position);
+		virtual void SetPosition(int x, int y);
 	
 	private:
 		virtual void Create(Window*)            = 0;

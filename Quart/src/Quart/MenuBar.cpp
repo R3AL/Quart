@@ -3,8 +3,7 @@
 namespace Quart
 {
 	MenuSubElement::MenuSubElement(const tstring& text): 
-		text(text),
-		OnClick(nullptr)
+		text(text)
 	{}
 
 	void MenuSubElement::Create(Window*) {}
@@ -16,8 +15,7 @@ namespace Quart
 	}
 
 	MenuElement::MenuElement(const tstring& text, unsigned int count, ...):
-		text(text),
-		OnClick(nullptr)
+		text(text)
 	{
 		va_list list;
 		va_start(list, count);
@@ -29,8 +27,7 @@ namespace Quart
 	}
 
 	MenuElement::MenuElement(const tstring& text):
-		text(text),
-		OnClick(nullptr)
+		text(text)
 	{
 
 	}
