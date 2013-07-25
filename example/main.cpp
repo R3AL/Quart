@@ -171,8 +171,8 @@ int main()
 	};
 	// [/]
 
-	auto infoLbl = new Label(170, 10, 400, 200, L"To use accelerators just press the specific key combination\n"
-		L"For example: Control + S");
+	window.Add(new Label(170, 10, 400, 200, L"To use accelerators just press the specific key combination\n"
+		L"For example: Control + S"));
 
 	return window.Run();
 }
